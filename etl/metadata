@@ -353,8 +353,10 @@ def load(ctx, data_directory, program, project, batch_size):
         program = ctx.obj['programs'][0]
     if not project:
         projects = [link.split('/')[-1] for link in submission_client.get_projects(program)['links']]
-        assert len(projects) == 1, f"No program provided and multiple programs {ctx.obj['projects']} {projects}"
-        project = projects[0]
+        if len(projects) == 1:
+            project = projects[0]
+        else:
+            get_logger_('load').warning(f"No program provided and multiple programs {ctx.obj['programs']} {projects}")
 
     nodes = nodes_in_load_order(submission_client)
 
