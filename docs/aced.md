@@ -36,7 +36,7 @@
         * Then restart fence.
 
         ```
-        docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up fence-service ;
+        docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up -d fence-service ;
         ```
 
   ## certs
@@ -58,7 +58,7 @@
 
 ## Data
 
-    * Per instructions, disable guppy and kibana
+    * Per instructions, in disable guppy and kibana
 
     * Create a program and project.  See https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#programs-and-projects
 
@@ -79,7 +79,15 @@
 
 ## API
 
-This may be a good time to examine the Gen3 API.  For example, view the `metadata` script:
+This may be a good time to examine the Gen3 API.  For example, view the `metadata` script.
+
+* Note:  if testing on localhost you will need to set an enviromental variable to enable the locally generated cert  
+
+
+```commandline
+
+REQUESTS_CA_BUNDLE=$(pwd)/Secrets/TLS/ca.pem ./etl/metadata --gen3_credentials_file credentials-localhost.json ls
+```
 
 ```
     $ ./etl/metadata ls | jq .
@@ -124,6 +132,8 @@ This may be a good time to examine the Gen3 API.  For example, view the `metadat
 
 ```
 
+
+
 ## Re-Enable guppy
 
   * (Re)Read the [documentation](https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#configuring-guppy-for-exploration-page)  
@@ -131,6 +141,88 @@ This may be a good time to examine the Gen3 API.  For example, view the `metadat
   * Rollback comment out of kibana in docker-compose.yml
   * Run `bash guppy_setup.sh`  
       
+
+## Expose the kibana service
+
+    * Add the kibana path to nginx.conf
+```commandline
++++ b/nginx.conf
+@@ -276,5 +276,17 @@ http {
+         location /lw-workspace/ {
+             return 302 /lw-workspace/proxy;
+         }
++
++        location /kibana {
++          proxy_http_version 1.1;
++          proxy_set_header Upgrade $http_upgrade;
++          proxy_set_header Connection 'upgrade';
++          proxy_set_header Host $host;
++          proxy_cache_bypass $http_upgrade;
++
++          proxy_pass  http://kibana-service:5601/;
++          rewrite ^/kibana/(.*)$ /$1 break;
++        }
++
+     }
+ }
+```   
+    * add the path to docker-compose
+
+```commandline
+   kibana-service:
+     image: quay.io/cdis/kibana-oss:6.5.4
+     container_name: kibana-service
+     environment:
+       - SERVER_NAME=kibana-service
+       - ELASTICSEARCH_URL=http://esproxy-service:9200
++      - SERVER_BASEPATH=/kibana
+     ports:
+       - 5601:5601
+     networks:
+
+```
+
+
+## Disable the spark and tube service
+
+* Update the docker compose to disable the spark and tube service
+
+```commandline
+@@ -283,42 +287,42 @@ services:
+       - fence-service
+       - portal-service
+       - pidgin-service
+-  tube-service:
+-    image: "quay.io/cdis/tube:2021.03"
+-    container_name: tube-service
+-    command: bash -c "while true; do sleep 5; done"
+-    networks:
+-      - devnet
+
+...
+```
+
+* Run the `tube-lite` replacement of spark and tube
+
+```commandline
+./etl/tube_lite --credentials_path credentials-localhost.json  --elastic http://localhost:9200
+```
+
+* Examine the results using kibana
+
+![image](kibana.png)
+
+* Examine the results in the portal
+
+![image](portal-tube-results.png)
+
+
+
+
+
+TODO (remainder of doc is work in progress)
+=====
+
 
 ## Let's setup discovery
 

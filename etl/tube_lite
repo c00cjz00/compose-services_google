@@ -1,0 +1,685 @@
+#!/usr/bin/env python3
+
+"""A lightweight replacement for gen3's spark/tube."""
+import logging
+from typing import List
+
+import click
+from gen3.auth import Gen3Auth
+from gen3.submission import Gen3Submission
+import requests
+from jsonpath_ng import parse
+from datetime import datetime
+
+"""
+export EP='--endpoint https://aced-training.compbio.ohsu.edu'
+# program-project - the program & project we want to load, see https://aced-training.compbio.ohsu.edu/submission
+# credentials from https://aced-training.compbio.ohsu.edu/identity
+export CRED='--credentials_path  ./Secrets/credentials-etl.json'
+# DEBUGGING
+export ETL="python3 ./scripts/etl_lite.py $EP $CRED --batch_size 100 --output_path /tmp/etl_lite.output.txt"
+# PROD
+export ETL="python3 ./scripts/etl_lite.py $EP $CRED --batch_size 100 --elastic http://esproxy-service:9200"
+$ETL
+
+"""
+
+DEFAULT_ELASTIC = "http://esproxy-service:9200"
+DEFAULT_NAMESPACE = "gen3.aced.io"
+
+# gen3 graph-model query
+
+# graphql for FILE
+
+FILE_SAMPLES = """
+      samples {
+        id
+        submitter_id
+        cases {
+          id
+          submitter_id
+        }
+      }
+"""
+
+FILE_ALIQUOTS = """
+      aliquots {
+        id
+        submitter_id
+        $FILE_SAMPLES
+      }
+""".replace('$FILE_SAMPLES', FILE_SAMPLES)
+
+FILE_READ_GROUPS = """
+read_groups {
+    id
+    submitter_id
+    $FILE_ALIQUOTS
+}
+""".replace('$FILE_ALIQUOTS', FILE_ALIQUOTS)
+
+FILE_SLIDES = """
+    slides {
+      id
+      submitter_id  
+      $FILE_SAMPLES
+    }
+""".replace('$FILE_SAMPLES', FILE_SAMPLES)
+
+FILE_PROPERTIES = """
+    id
+    type
+    state
+    md5sum
+    data_type
+    data_format
+    file_name
+    file_size
+    project_id
+    object_id
+    submitter_id
+"""
+
+FILE_GRAPHQL = """
+query ($first: Int!, $offset: Int!) {
+  submitted_copy_number(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_READ_GROUPS
+  }
+  submitted_unaligned_reads(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_READ_GROUPS
+  }
+  submitted_somatic_mutation(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_READ_GROUPS
+  }
+  submitted_aligned_reads(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_READ_GROUPS
+  }
+  submitted_copy_number(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_ALIQUOTS
+  }
+  submitted_methylation(first: $first, offset: $offset) {
+    $FILE_PROPERTIES
+    $FILE_ALIQUOTS
+  }
+  slide_image(first: $first, offset: $offset)  {
+    $FILE_PROPERTIES
+    $FILE_SLIDES    
+  }
+}
+""".replace('$FILE_PROPERTIES', FILE_PROPERTIES)\
+    .replace('$FILE_SLIDES', FILE_SLIDES)\
+    .replace('$FILE_ALIQUOTS', FILE_ALIQUOTS)\
+    .replace('$FILE_READ_GROUPS', FILE_READ_GROUPS)
+
+
+# target file record in ES
+EXPECTED_FILE_SOURCE = {
+    "source_node": "submitted_methylation",
+    "state": "validated",
+    "md5sum": "923f43968664016555688b6911732725",
+    "data_type": "Methylation Intensity Values",
+    "file_name": "7693efc928",
+    "file_size": 83,
+    "object_id": "1c227e28-caa7-416b-935a-046eebdf4472",
+    "data_format": "IDAT",
+    "project_id": "MyFirstProgram-MySecondProject",
+    "program_name": [
+      "MyFirstProgram"
+    ],
+    "project_code": [
+      "MySecondProject"
+    ],
+    "_case_id": [],
+    "auth_resource_path": "/programs/MyFirstProgram/projects/MySecondProject",
+    "_file_id": "84656403-d8f5-4454-b2e5-87f82ec37e96",
+    "node_id": "84656403-d8f5-4454-b2e5-87f82ec37e96"
+  }
+
+
+EXPECTED_CASE_SOURCE = {
+    "project_id": "MyFirstProgram-MySecondProject",
+    "disease_type": "a8dae39b2f",
+    "primary_site": "4a428d5b1e",
+    "submitter_id": "case_4cf6575e60",
+    "race": "american indian or alaska native",
+    "gender": None,
+    "ethnicity": "Unknown",
+    "year_of_birth": 33.87963205329386,
+    "_samples_count": 1,
+    "_aliquots_count": 1,
+    "_submitted_methylations_count": 0,
+    "_submitted_copy_number_files_on_aliquots_count": 0,
+    "_read_groups_count": 1,
+    "_submitted_unaligned_reads_count": 1,
+    "_submitted_aligned_reads_count": 1,
+    "_submitted_somatic_mutations_count": 0,
+    "_submitted_copy_number_files_on_read_groups_count": 0,
+    "data_format": [
+      "BED",
+      "c07ce6b6df",
+      "FASTQ"
+    ],
+    "data_type": [
+      "Raw IMC Data",
+      "Aligned Reads",
+      "Unaligned Reads"
+    ],
+    "_file_id": [
+      "b112e1e0-35a1-473d-98b9-7a6f303954c1",
+      "39c088dc-826a-4f12-8924-402d05835222",
+      "05fff922-dc26-496c-946f-8352d71969ec"
+    ],
+    "auth_resource_path": "/programs/MyFirstProgram/projects/MySecondProject",
+    "_case_id": "1631deee-f909-4921-b38e-d75e062f9f1a",
+    "node_id": "1631deee-f909-4921-b38e-d75e062f9f1a"
+  }
+
+
+#   graphql query for CASE
+CASE_GRAPHQL = """
+query ($first: Int!, $offset: Int!) {
+  case(first: $first, offset: $offset) {
+    id
+    project_id
+    disease_type
+    primary_site
+    submitter_id
+    demographics {
+      race
+      gender
+      year_of_birth
+    }
+    _samples_count
+    samples {
+      _aliquots_count
+      aliquots {
+        _read_groups_count
+        _submitted_copy_number_files_count
+        _submitted_methylation_files_count
+        read_groups {
+          _submitted_copy_number_files_count
+          _submitted_somatic_mutations_count
+          _submitted_aligned_reads_files_count
+          _submitted_unaligned_reads_files_count
+          submitted_aligned_reads_files {
+            file_name
+            data_type
+            data_format
+            file_id: id
+          }
+          submitted_unaligned_reads_files {
+            file_name
+            data_type
+            data_format
+            file_id: id
+          }
+          submitted_somatic_mutations {
+            file_name
+            data_type
+            data_format
+            file_id: id
+          }
+          submitted_copy_number_files {
+            file_name
+            data_type
+            data_format
+            file_id: id
+          }
+        }
+        submitted_methylation_files {
+          file_name
+          data_type
+          data_format
+          file_id: id
+        }
+        submitted_copy_number_files {
+          file_name
+          data_type
+          data_format
+          file_id: id
+        }
+      }
+    }
+  }
+}
+
+"""
+
+
+EXPECTED_FILE_ARRAY_CONFIG = {
+    "timestamp": "2022-08-25T01:44:47.115494",
+    "array": [
+      "_case_id"
+    ]
+  }
+EXPECTED_ETL_ARRAY_CONFIG = {
+    "timestamp": "2022-08-25T01:44:47.115494",
+    "array": [
+        "data_format",
+        "data_type",
+        "_file_id"
+    ]
+}
+
+
+def key_values(nested, key, normalize=True):
+    """Return all values of a key in nested, cast to None, and scalar if normalize"""
+    jsonpath_expression = parse(f"$..[{key}]")
+    matches = jsonpath_expression.find(nested)
+    if normalize:
+        if len(matches) == 0:
+            return None
+        if len(matches) == 1:
+            return matches[0].value
+    return [match.value for match in matches]
+
+
+def sum_key_values(nested, key):
+    """Return the sum of values for key."""
+    return sum(key_values(nested, key, normalize=False))
+
+
+def create_index_from_source(_source, _index, _type):
+    """Given an ES source dict, create ES index."""
+    mappings = {}
+    for k, v in _source.items():
+        if type(v).__name__ in ['str', 'NoneType']:
+            mappings[k] = {
+                "type": "keyword"
+            }
+        elif isinstance(v, list):
+            mappings[k] = {
+                "type": "text"
+            }
+        else:
+            # naive, there are probably other types
+            mappings[k] = {"type": "float"}
+    return {
+        "mappings": {_type: {"properties": mappings}}
+    }
+
+
+def submission_client(endpoint, refresh_file):
+    """Create authorized client."""
+    auth = Gen3Auth(endpoint, refresh_file=refresh_file)
+    assert auth, 'should return an auth client'
+    submission_client_ = Gen3Submission(endpoint, auth)
+    assert submission_client_, 'should return a submission client'
+    assert 'delete_program' in dir(submission_client_), 'missing delete_program'
+    assert 'create_program' in dir(submission_client_), 'missing create_program'
+    return submission_client_
+
+
+def drop_file_indexes(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Drop the es indexes."""
+    return {"method": 'DELETE', "url": f'{elastic}/{name_space}_file_0'}
+
+
+def write_array_aliases(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write the array aliases."""
+    # EXPECTED_ALIASES = {
+    #     ".kibana_1": {
+    #         "aliases": {
+    #             ".kibana": {}
+    #         }
+    #     },
+    #     "etl-array-config_0": {
+    #         "aliases": {
+    #             "etl-array-config": {},
+    #             "etl_array-config": {},
+    #             "time_2022-08-25T01:44:47.115494": {}
+    #         }
+    #     },
+    #     "etl_0": {
+    #         "aliases": {
+    #             "etl": {},
+    #             "time_2022-08-25T01:44:47.115494": {}
+    #         }
+    #     },
+    #     "file-array-config_0": {
+    #         "aliases": {
+    #             "file-array-config": {},
+    #             "file_array-config": {},
+    #             "time_2022-08-25T01:44:47.115494": {}
+    #         }
+    #     },
+    #     "file_0": {
+    #         "aliases": {
+    #             "file": {},
+    #             "time_2022-08-25T01:44:47.115494": {}
+    #         }
+    #     }
+    # }
+    return {
+        "method": 'POST',
+        "url": f'{elastic}/_aliases',
+        "json": {
+            "actions": [{"add": {"index": f"{name_space}_file-array-config_0",
+                                 "alias": f"{name_space}_array-config"}},
+                        {"add": {"index": f"{name_space}_case-array-config_0",
+                                 "alias": f"{name_space}_array-config"}},
+                        {"add": {"index": f"{name_space}_file-array-config_0",
+                                 "alias": f"file_array-config"}},
+                        {"add": {"index": f"{name_space}_case-array-config_0",
+                                 "alias": f"etl_array-config"}}
+                        ]}
+    }
+
+
+def create_file_indexes(_source, elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Create the es indexes."""
+    _index = f"{name_space}_file_0"
+    _type = "file"
+    return {
+        "method": 'PUT',
+        "url": f'{elastic}/{_index}',
+        "json": create_index_from_source(_source, _index, _type)
+    }
+
+
+def write_file_array_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write the array config."""
+    return {
+        "method": 'PUT',
+        "url": f'{elastic}/{name_space}_file-array-config_0/_doc/{name_space}_file',
+        "json": {"timestamp": datetime.now().isoformat(), "array": ['_case_id']}
+    }
+
+
+# gen3.aced.io_array-config gen3.aced.io_file-array-config_0 - - -
+
+# case                      gen3.aced.io_case_0              - - -
+# etl                       gen3.aced.io_case_0              - - -
+# file                      gen3.aced.io_file_0              - - -
+
+# gen3.aced.io_case         gen3.aced.io_case_0              - - -
+# gen3.aced.io_file         gen3.aced.io_file_0              - - -
+# etl_array-config          gen3.aced.io_case-array-config_0 - - -
+# gen3.aced.io_array-config gen3.aced.io_case-array-config_0 - - -
+# .kibana                   .kibana_1                        - - -
+
+
+def write_file_alias_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write the alias config."""
+    return {
+        "method": 'POST',
+        "url": f'{elastic}/_aliases',
+        "json": {"actions": [{"add": {"index": f"{name_space}_file_0", "alias": f"file"}}]}  # {name_space}_
+    }
+
+
+def write_file_data(row, elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write data."""
+    return {
+        "method": 'POST',
+        "url": f'{elastic}/{name_space}_file_0/file',
+        "json": row
+    }
+
+
+def drop_patient_indexes(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Drop the es indexes."""
+    return {"method": 'DELETE', "url": f'{elastic}/{name_space}_case_0'}
+
+
+def create_patient_indexes(_source, elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Create the es indexes."""
+    _index = f"{name_space}_case_0"
+    _type = "case"
+    return {
+        "method": 'PUT',
+        "url": f'{elastic}/{_index}',
+        "json": create_index_from_source(_source, _index, _type)
+    }
+
+
+def write_patient_array_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write the array config."""
+    # { "timestamp": "2021-09-18T17:10:49.107081", "array": [ "_file_id" ] }
+    return {
+        "method": 'PUT',
+        "url": f'{elastic}/{name_space}_case-array-config_0/_doc/{name_space}_patient',
+        "json": {"timestamp": datetime.now().isoformat(), "array": ['data_format', 'data_type', '_file_id']}
+    }
+
+
+def write_patient_alias_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write the alias config."""
+    return {
+        "method": 'POST',
+        "url": f'{elastic}/_aliases',
+        "json": {"actions": [{"add": {"index": f"{name_space}_case_0", "alias": f"etl"}}]}
+    }
+
+
+def write_patient_data(row, elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPACE):
+    """Write data."""
+    return {
+        "method": 'POST',
+        "url": f'{elastic}/{name_space}_case_0/case',
+        "json": row
+    }
+
+
+def read_files(sc, batch_size):
+    """Read file records and their ancestors from gen3, map to elastic search."""
+    first = batch_size
+    offset = 0
+    c = 0
+    while True:
+        graphql_variables = {"first": first, "offset": offset}
+        graph_ql_response = sc.query(FILE_GRAPHQL, variables=graphql_variables)
+        c += 1
+        has_data = False
+        if 'data' in graph_ql_response:
+            sum_data = 0
+            for k in graph_ql_response['data']:
+                sum_data += len(graph_ql_response['data'][k])
+            has_data = sum_data > 0
+        if not has_data:
+            break
+
+        offset += batch_size
+        for file_entity in graph_ql_response['data']:
+            # ['slide_image', 'submitted_aligned_reads', 'submitted_copy_number', 'submitted_methylation', 'submitted_somatic_mutation', 'submitted_unaligned_reads']
+            for f in graph_ql_response['data'][file_entity]:
+                assert 'project_id' in f, (file_entity, f.keys())
+                program, project = f['project_id'].split('-')
+
+                for k in ['read_groups', 'aliquots', 'slides']:
+                    if k in f:
+                        parent_entity_name = k
+                assert parent_entity_name
+
+                source_ = {
+                    "node_id":  f['id'],
+                    "object_id":  f"object_{f['id']}",
+                    "source_node": "file",
+                    "auth_resource_path": f"/programs/{program}/projects/{project}",
+                    '_file_id': f['id'],
+                    # 'submitter_id': f['submitter_id'],
+                    'data_format': f['data_format'],
+                    'file_name': f['file_name'],
+                    'data_type': f['data_type'],
+                    'md5sum': f['md5sum'],
+                    'file_size': f['file_size'],
+                    'project_id': f['project_id'],
+                    'project_code': [
+                        project
+                    ],
+                    'program_name': [
+                        program
+                    ],
+                    'state': f['state']
+                }
+
+                if len(f[parent_entity_name]) == 0:
+                    source_ = source_ | {
+                    # '_sample_id': None,
+                    # 'sample_submitter_id': None,
+                    '_case_id': None,
+                    # 'case_submitter_id': None,
+                    }
+                elif 'aliquots' in f[parent_entity_name][0]:
+                    source_ = source_ | {
+                    # '_sample_id': f[parent_entity_name][0]['aliquots'][0]['samples'][0]['id'],
+                    # 'sample_submitter_id': f[parent_entity_name][0]['aliquots'][0]['samples'][0]['submitter_id'],
+                    '_case_id': f[parent_entity_name][0]['aliquots'][0]['samples'][0]['cases'][0]['id'],
+                    # 'case_submitter_id': f[parent_entity_name][0]['aliquots'][0]['samples'][0]['cases'][0]['submitter_id'],
+                    }
+                else:
+                    source_ = source_ | {
+                    # '_sample_id': f[parent_entity_name][0]['samples'][0]['id'],
+                    # 'sample_submitter_id': f[parent_entity_name][0]['samples'][0]['submitter_id'],
+                    '_case_id': f[parent_entity_name][0]['samples'][0]['cases'][0]['id'],
+                    # 'case_submitter_id': f[parent_entity_name][0]['samples'][0]['cases'][0]['submitter_id'],
+                    }
+
+                # check against template record
+                source_keys = set(source_.keys())
+                expected_source_keys = set(EXPECTED_FILE_SOURCE.keys())
+                assert source_keys == expected_source_keys, (
+                    "Missing or extra keys",
+                    expected_source_keys.difference(source_keys), source_keys.difference(expected_source_keys)
+                )
+                yield source_
+
+
+def read_patients(sc, batch_size):
+    """Read patient records and their descendants from gen3."""
+    first = batch_size
+    offset = 0
+    c = 0
+    while True:
+        # pagination
+        graphql_variables = {"first": first, "offset": offset}
+        r = sc.query(CASE_GRAPHQL, variables=graphql_variables)
+        c += 1
+        if 'data' not in r or 'case' not in r['data'] or len(r['data']['case']) == 0:
+            break
+        offset += batch_size
+        for case in r['data']['case']:
+            program, project = case['project_id'].split('-')
+            # patient fields
+            _source = {
+                "project_id": case['project_id'],
+                "disease_type": case['disease_type'],
+                "primary_site": case['primary_site'],
+                "submitter_id": case['submitter_id'],
+                "race": key_values(case, 'race'),
+                "gender": key_values(case, 'gender'),
+                "ethnicity": key_values(case, 'ethnicity'),  # TODO
+                "year_of_birth": key_values(case, 'year_of_birth'),
+                "_samples_count": case['_samples_count'],
+                "_aliquots_count": sum_key_values(case, '_aliquots_count'),
+                "_submitted_methylations_count": sum_key_values(case, '_submitted_methylation_files_count'),
+                "_submitted_copy_number_files_on_aliquots_count": sum_key_values(case, '_submitted_methylation_files_count'),
+                "_read_groups_count": sum_key_values(case, '_read_groups_count'),
+                "_submitted_unaligned_reads_count": sum_key_values(case, '_submitted_unaligned_reads_files_count'),
+                "_submitted_aligned_reads_count": sum_key_values(case, '_submitted_aligned_reads_files_count'),
+                "_submitted_somatic_mutations_count": sum_key_values(case, '_submitted_somatic_mutations_count'),
+                "_submitted_copy_number_files_on_read_groups_count":  sum_key_values(case, '_submitted_copy_number_files_count'),
+                "data_format": key_values(case, 'data_format'),
+                "data_type": key_values(case, 'data_type'),
+                "_file_id": key_values(case, 'file_id'),
+                "auth_resource_path": f"/programs/{program}/projects/{project}",
+                "_case_id": case['id'],
+                "node_id": case['id']
+              }
+
+            # check against template record
+            source_keys = set(_source.keys())
+            expected_source_keys = set(EXPECTED_CASE_SOURCE.keys())
+            assert source_keys == expected_source_keys, (
+                "Missing or extra keys",
+                expected_source_keys.difference(source_keys), source_keys.difference(expected_source_keys)
+            )
+
+            yield _source
+
+
+def write_dict(output, d):
+    """Write a dict to the output."""
+    output.write(str(d))
+    output.write("\n")
+
+
+def write_http(session, _params, raise_for_status=True):
+    """Write a dict to the session."""
+    r = session.request(**_params)
+    if raise_for_status:
+        if r.status_code > 300:
+            print(_params)
+            print(r.text)
+        r.raise_for_status()
+
+
+@click.command()
+@click.option('--endpoint', type=str, help='Gen3 host base url.')
+@click.option('--credentials_path', type=str, help='Path to gen3 credentials.')
+@click.option('--batch_size', type=int, default=50, help='Number of records to read from gen3 at a time (50).')
+@click.option('--output_path', type=str, default=None, help='For debugging, write the output to this path')
+@click.option('--elastic', type=str, default=None, help='Write directly to elastic host')
+def etl(credentials_path, endpoint, output_path, batch_size, elastic):
+    """Extract file centric index from Gen3, create elastic search index."""
+    # check destination
+    assert output_path or elastic, "Please set either elastic url or output_path file path"
+    # connect to source (gen3)
+    sc = submission_client(endpoint, credentials_path)
+
+    # create a handy little function that writes to either file or session
+    output_stream = None
+    write_method = None
+    if output_path:
+        output_stream = open(output_path, "w")
+        write_method = write_dict
+    else:
+        output_stream = requests.sessions.Session()
+        write_method = write_http
+
+    def _writer(data):
+        """Write to destination"""
+        write_method(output_stream, data)
+
+    #
+    # FILE centric index
+    #
+
+    # assumes guppy-setup dropped ES indices
+    # _writer(drop_file_indexes(elastic))
+    # write data
+    for i, row in enumerate(read_files(sc, batch_size)):
+        # on first row, sample the data and create an index
+        if i == 0:
+            _writer(create_file_indexes(row, elastic))
+        _writer(write_file_data(row, elastic))
+    # write "special" index guppy uses to discover arrays
+    _writer(write_file_array_config(elastic))
+    # write devops aliases
+    _writer(write_file_alias_config(elastic))
+
+    #
+    # PATIENT centric index
+    #
+
+    # _writer(drop_patient_indexes(elastic))
+    for i, row in enumerate(read_patients(sc, batch_size)):
+        if i == 0:
+            _writer(create_patient_indexes(row, elastic))
+        _writer(write_patient_data(row, elastic))
+    _writer(write_patient_array_config(elastic))
+    _writer(write_patient_alias_config(elastic))
+    _writer(write_array_aliases(elastic))
+
+    # cleanup
+    output_stream.close()
+
+
+if __name__ == '__main__':
+    etl()
+
