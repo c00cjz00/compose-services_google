@@ -1,0 +1,87 @@
+version: '3'
+
+
+# Settings and configurations that are common for all minio containers
+x-minio-common: &minio-common
+  image: quay.io/minio/minio:RELEASE.2022-09-01T23-53-36Z
+#  command: server --console-address ":9001" http://minio{1...4}/data{1...2}
+  command: server --console-address ":9001" http://minio{1...1}-service/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  environment:
+     MINIO_ROOT_USER: minioadmin
+     MINIO_ROOT_PASSWORD: minioadmin
+  networks:
+    - devnet
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
+services:
+# starts 4 docker containers running minio server instances.
+# using nginx reverse proxy, load balancing, you can access
+# it through port 9000.
+  minio1-service:
+    <<: *minio-common
+    hostname: minio1-service
+    container_name: minio1-service
+    volumes:
+      - data1-1:/data1
+      - data1-2:/data2
+
+#  minio2:
+#    <<: *minio-common
+#    hostname: minio2
+#    volumes:
+#      - data2-1:/data1
+#      - data2-2:/data2
+#
+#  minio3:
+#    <<: *minio-common
+#    hostname: minio3
+#    volumes:
+#      - data3-1:/data1
+#      - data3-2:/data2
+#
+#  minio4:
+#    <<: *minio-common
+#    hostname: minio4
+#    volumes:
+#      - data4-1:/data1
+#      - data4-2:/data2
+
+
+  #
+  # adds minio ports and dependency to revproxy
+  #
+  revproxy-service:
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9000:9000"
+      - "9001:9001"
+    depends_on:
+      - arborist-service
+      - indexd-service
+      - peregrine-service
+      - sheepdog-service
+      - fence-service
+      - portal-service
+      - pidgin-service
+      - minio1-service
+
+
+## By default this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  data1-1:
+  data1-2:
+#  data2-1:
+#  data2-2:
+#  data3-1:
+#  data3-2:
+#  data4-1:
+#  data4-2:

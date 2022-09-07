@@ -173,7 +173,7 @@ services:
       - cluster.name=elasticsearch-cluster
       - bootstrap.memory_lock=false
       # For apple silicon
-      # - bootstrap.system_call_filter=false
+      - bootstrap.system_call_filter=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     entrypoint:
       - /bin/bash

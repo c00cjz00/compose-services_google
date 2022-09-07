@@ -1,69 +1,103 @@
 # ACED specific changes
 
+> This document assumes you have completed setting up a 'stock' gen3 instance as described in https://github.com/uc-cdis/compose-services
+> 
+> Now that you've completed this task, let's explore some ACED specific customizations.
+
 
 ## Fence
 
+ > Fence is the main authentication mechanism for Gen3.   Let's add some ACED specifics ...
+
   ## setup
 
-  See compose services docs for `bash ./creds_setup.sh aced-training.compbio.ohsu.edu`
+  > Let's create an instance that should be hosted on  aced-training.compbio.ohsu.edu
+
+  You should have already seen this in the compose services docs for `bash ./creds_setup.sh aced-training.compbio.ohsu.edu`
+
+  To test locally,
+
+    ```
+    # testing
+    #10.96.11.151 aced-training.compbio.ohsu.edu
+    127.0.0.1  aced-training.compbio.ohsu.edu
+    ```
 
   ## windmill's auth display
   
-  add to gitops.json
+  add to Secrets/gitops.json
   ```
   "showArboristAuthzOnProfile": true,
   "showFenceAuthzOnProfile": false
   ```
 
+   You should now see detailed authorization in the profile screen.
+
+   ![image](profile.png)
+  
+    
+
   ## migrations
+
+  > The fence service will automatically apply a database migration on startup.   We don't want to do that every time, let's turn that off
+
   In Secrets/fence-config.yaml
   ```
-  ENABLE_DB_MIGRATION: false 
+  ENABLE_DB_MIGRATION: false   
   ```
+
+  Now, when you re-start fence-service, you should see this message
+  ```
+  fence-service  | [2022-09-06 21:27:31,812][     fence][   INFO] NOT running database migration.
+  ```
+
 
   ## Authentication
 
-  * Let's turn off auth: Secrets/fence-config.yaml#L48-L49
+  > For testing, we won't configure OAuth, we will use a default user "test"
 
-        ```
-        # if true, will automatically login a user with username "test"
-        MOCK_AUTH: true
-        ```
+* Let's turn off auth: Secrets/fence-config.yaml#L48-L49
 
-        * Then adjust the user mapping to make the "test" user admin. In Secrets/user.yaml, change all occurances of `username1@gmail.com` to `test`
+   ```
+   # if true, will automatically login a user with username "test"
+   MOCK_AUTH: true
+   ```
+
+   * Then adjust the user mapping to make the "test" user admin. In Secrets/user.yaml, change all occurrences of `username1@gmail.com` to `test`
 
 
-        * Then restart fence.
+   * Then restart fence.
+     ```
+     docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up -d fence-service ;
+     ```
 
-        ```
-        docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up -d fence-service ;
-        ```
+  
+## certs
 
-  ## certs
-
-    If you are on an exastack node (or AWS instance):
+* If you are on an exastack node (or AWS instance) and want to use the official certificate, please ask for access:
     
-    ohsu intranet wild card cert
-    https://ohsuitg-my.sharepoint.com/:f:/g/personal/walsbr_ohsu_edu/ElinLNATlvFPiI6jHp6oR04BLPnVFUT76chpbRbykJWTbQ?e=EorNnL
+  ```
+  https://ohsuitg-my.sharepoint.com/ XXXXX
+  ```
 
-    * copy certs commands, assuming certs directory in ~/compbio-tls
+  * Once you have access, to install the certificate in gen3 follow these steps, assuming certs directory in ~/compbio-tls
 
-    ```
+  ```
 
-    cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.interim-bundle.pem  ./Secrets/TLS/service.crt
-    cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.key ./Secrets/TLS/service.key   
+  cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.interim-bundle.pem  ./Secrets/TLS/service.crt
+  cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.key ./Secrets/TLS/service.key   
 
-    ```
+  ```
 
 
 ## Data
 
-    * Per instructions, in disable guppy and kibana
+  * Per instructions, in disable guppy and kibana see https://github.com/uc-cdis/compose-services/blob/master/docs/setup.md#start-running-your-local-gen3-docker-compose-environment
 
-    * Create a program and project.  See https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#programs-and-projects
+  * Create a program and project.  See https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#programs-and-projects
 
 
-    * Let's generate some data
+  * Let's generate some data
 
         ```
         export TEST_DATA_PATH="$(pwd)/testData"
@@ -72,8 +106,8 @@
         docker run -it -v "${TEST_DATA_PATH}:/mnt/data" --rm --name=dsim --entrypoint=data-simulator quay.io/cdis/data-simulator:master simulate --url https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json --path /mnt/data --program MyFirstProgram --project MyFirstProject --max_samples 10
         ```
 
-    * Load the data manually by following the instructions in 
-        https://gen3.org/resources/user/submit-data/#begin-metadata-tsv-submissions  (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
+  * Load the data manually by following the instructions in 
+      https://gen3.org/resources/user/submit-data/#begin-metadata-tsv-submissions  (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
 
 ![image](graph-view.png)
 
@@ -81,12 +115,13 @@
 
 This may be a good time to examine the Gen3 API.  For example, view the `metadata` script.
 
-* Note:  if testing on localhost you will need to set an enviromental variable to enable the locally generated cert  
+> Note:  if testing on localhost you will need to set an environmental variable to enable the locally generated cert  
 
+List the schema entities: 
 
 ```commandline
 
-REQUESTS_CA_BUNDLE=$(pwd)/Secrets/TLS/ca.pem ./etl/metadata --gen3_credentials_file credentials-localhost.json ls
+./etl/metadata --gen3_credentials_file credentials-localhost.json ls
 ```
 
 ```
@@ -144,7 +179,7 @@ REQUESTS_CA_BUNDLE=$(pwd)/Secrets/TLS/ca.pem ./etl/metadata --gen3_credentials_f
 
 ## Expose the kibana service
 
-    * Add the kibana path to nginx.conf
+    * Add the kibana path to `nginx.conf`
 ```commandline
 +++ b/nginx.conf
 @@ -276,5 +276,17 @@ http {
@@ -208,6 +243,9 @@ REQUESTS_CA_BUNDLE=$(pwd)/Secrets/TLS/ca.pem ./etl/metadata --gen3_credentials_f
 ./etl/tube_lite --credentials_path credentials-localhost.json  --elastic http://localhost:9200
 ```
 
+* Alter `guppy-setup.sh` to run the tube_lite
+
+
 * Examine the results using kibana
 
 ![image](kibana.png)
@@ -217,7 +255,45 @@ REQUESTS_CA_BUNDLE=$(pwd)/Secrets/TLS/ca.pem ./etl/metadata --gen3_credentials_f
 ![image](portal-tube-results.png)
 
 
+## Local Object Store (minio)
 
+* Add the minio configuration to `docker-compose-override.yml` 
+
+* Download the image
+
+  ```docker-compose pull minio1``` 
+
+* Start the service
+
+  ```dc stop minio1-service ; dc rm -f minio1-service ; dc up -d minio1-service ; dc logs -f minio1-service```
+
+* Examine logs
+
+```
+$ dc logs  minio1-service
+    minio1-service  | Formatting 1st pool, 1 set(s), 2 drives per set.
+    minio1-service  | WARNING: Host minio1-service:9000 has more than 1 drives of set. A host failure will result in data becoming unavailable.
+    minio1-service  | MinIO Object Storage Server
+    minio1-service  | Copyright: 2015-2022 MinIO, Inc.
+    minio1-service  | License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+    minio1-service  | Version: RELEASE.2022-09-01T23-53-36Z (go1.18.5 linux/arm64)
+    minio1-service  |
+    minio1-service  | Status:         2 Online, 0 Offline.
+    minio1-service  | API: http://172.19.0.2:9000  http://127.0.0.1:9000
+    minio1-service  | Console: http://172.19.0.2:9001 http://127.0.0.1:9001
+    minio1-service  |
+    minio1-service  | Documentation: https://docs.min.io  
+```
+
+* Verify connection
+
+  * http://localhost:9001/login
+  * curl -v http://localhost:9000/minio/health/live
+  
+     ```>>> HTTP/1.1 200 OK```
+
+* Enable fence URL signing
+    * see AWS_CREDENTIALS, S3_BUCKETS in Secrets/fence-config.yml
 
 
 TODO (remainder of doc is work in progress)

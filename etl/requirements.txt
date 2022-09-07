@@ -2,3 +2,4 @@ pyjwt
 Click
 gen3
 jsonpath-ng
+certifi
