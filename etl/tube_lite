@@ -386,8 +386,8 @@ def write_file_array_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMESPAC
     """Write the array config."""
     return {
         "method": 'PUT',
-        "url": f'{elastic}/{name_space}_file-array-config_0/_doc/{name_space}_file',
-        "json": {"timestamp": datetime.now().isoformat(), "array": ['_case_id']}
+        "url": f'{elastic}/{name_space}_file-array-config_0/_doc/file',
+        "json": {"timestamp": datetime.now().isoformat(), "array": ["project_code", "program_name"]}
     }
 
 
@@ -443,7 +443,7 @@ def write_patient_array_config(elastic=DEFAULT_ELASTIC, name_space=DEFAULT_NAMES
     # { "timestamp": "2021-09-18T17:10:49.107081", "array": [ "_file_id" ] }
     return {
         "method": 'PUT',
-        "url": f'{elastic}/{name_space}_case-array-config_0/_doc/{name_space}_patient',
+        "url": f'{elastic}/{name_space}_case-array-config_0/_doc/etl',
         "json": {"timestamp": datetime.now().isoformat(), "array": ['data_format', 'data_type', '_file_id']}
     }
 
