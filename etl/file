@@ -60,8 +60,8 @@ def cli(ctx, gen3_credentials_file):
     ctx.obj['programs'] = [link.split('/')[-1] for link in ctx.obj['submission_client'].get_programs()['links']]
 
 
-def md5(file_name):
-    """Calculate the hash and size"""
+def file_attributes(file_name):
+    """Calculate the hash and size."""
     import hashlib
 
     md5_hash = hashlib.md5()
@@ -79,7 +79,7 @@ def md5(file_name):
               help='File name to upload')
 @click.pass_context
 def upload(ctx, file_name):
-    """Upload file_name."""
+    """Upload file_name, update hashes and size."""
 
     file_client = ctx.obj['file_client']
     document = file_client.upload_file(file_name)
@@ -90,15 +90,15 @@ def upload(ctx, file_name):
     files = {'file': open(file_name, 'rb')}
     r = requests.put(signed_url, files=files)
     assert r.status_code == 200, (signed_url, r.text)
-    print(f'OK: upload {file_name}')
+    get_logger_("upload").info(f"Successfully uploaded file \"{file_name}\" to GUID {guid}")
     index_client = ctx.obj['index_client']
-    md5_, size_ = md5(file_name)
+    md5_, size_ = file_attributes(file_name)
     record = index_client.get_record(guid)
     assert 'rev' in record, record
     rev = record['rev']
     r = index_client.update_blank(guid, rev, hashes={'md5': md5_}, size=size_)
     assert r['size'] == size_, ("Unexpected size", r)
-    print(f'OK: update hash and size {(md5_, size_)}')
+    get_logger_("upload").info(f'Successfully updated hash and size {(md5_, size_)}')
 
 
 @cli.command()
