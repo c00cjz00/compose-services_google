@@ -12,6 +12,8 @@ Secrets/
 *pyc
 #docker-compose.override.yml
 # for local dev
-credentials.json
+credential*.json
 venv/
 .idea/
+DATA/
+
