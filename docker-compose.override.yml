@@ -10,6 +10,9 @@ x-minio-common: &minio-common
   environment:
      MINIO_ROOT_USER: minioadmin
      MINIO_ROOT_PASSWORD: minioadmin
+     MINIO_NOTIFY_WEBHOOK_ENABLE_PRIMARY: on
+     MINIO_NOTIFY_WEBHOOK_ENDPOINT_PRIMARY: http://minio-webhook:3000/file-uploaded
+
   networks:
     - devnet
   healthcheck:
@@ -86,7 +89,7 @@ services:
       - minio-manchester
       - minio-stanford
 
-## create an etl container to hold our tools
+## create an etl container to hold our command line tools
   etl-service:
     build: etl
     hostname: etl-service
@@ -100,6 +103,26 @@ services:
       - minio-ucl
       - minio-manchester
       - minio-stanford
+
+## create a web-hook container handle events
+  minio-webhook:
+    build: minio-webhook
+    hostname: minio-webhook
+    container_name: minio-webhook
+    expose:
+      - "3000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 3000
+    networks:
+      - devnet
+    volumes:
+      - ./minio-webhook:/minio-webhook
+    depends_on:
+      - minio-default
+      - minio-ohsu
+      - minio-ucl
+      - minio-manchester
+      - minio-stanford
+
 
 
 
