@@ -8,11 +8,12 @@
         "data_format": "91f86dd1b4",
         "data_type": "684139cae1",
         "experimental_strategy": "2e39dca6af",
-        "file_name": "f9aecde49a",
-        "file_size": 70,
-        "md5sum": "8e079dc143b1cb6d971626f1f35324b7",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/f9aecde49a",
+        "file_size": 10560,
+        "md5sum": "f722106c807ded7d0e9e65e30a3d2166",
         "submitter_id": "submitted_copy_number_6f3cf67a90",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "961d53ec-b90b-4a71-889c-1fa024dbfe03"
     },
     {
         "consent_codes": [],
@@ -23,11 +24,12 @@
         "data_format": "3ae5b38cde",
         "data_type": "1197acf028",
         "experimental_strategy": "856df4142e",
-        "file_name": "758278b648",
-        "file_size": 87,
-        "md5sum": "de643587fc8b12063654396ac2ec4f7d",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/758278b648",
+        "file_size": 16695,
+        "md5sum": "52a78bf320aa5d0e9c6969c37c49f60c",
         "submitter_id": "submitted_copy_number_de4fe987b3",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "a70b43cd-bd56-4cbe-acdf-2562489981e6"
     },
     {
         "consent_codes": [],
@@ -38,11 +40,12 @@
         "data_format": "b3d0ea3e3e",
         "data_type": "c1a0480d16",
         "experimental_strategy": "6efea9f16f",
-        "file_name": "1e05043b2f",
-        "file_size": 93,
-        "md5sum": "ca5fbcb64aed9504be33c2552037a0a2",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/1e05043b2f",
+        "file_size": 11789,
+        "md5sum": "dadca966e0d2d7a9d890841e6566566a",
         "submitter_id": "submitted_copy_number_063a4e14cd",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "02fc8c4a-8504-445f-af9f-ad04da7f3394"
     },
     {
         "consent_codes": [],
@@ -53,11 +56,12 @@
         "data_format": "eea98e125c",
         "data_type": "9f16bd1b2c",
         "experimental_strategy": "b5870e5f98",
-        "file_name": "e66679582f",
-        "file_size": 65,
-        "md5sum": "eaf92dfe9f907f097dc20a1abc698498",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/e66679582f",
+        "file_size": 5353,
+        "md5sum": "cf9cec9f92c2f1d958c19b67315eb495",
         "submitter_id": "submitted_copy_number_cc81c5b825",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "676553c9-df60-4f68-8dd0-aa31f1773c54"
     },
     {
         "consent_codes": [],
@@ -68,11 +72,12 @@
         "data_format": "0528e9d1d7",
         "data_type": "00cfe2d112",
         "experimental_strategy": "8323efd54f",
-        "file_name": "04aeca2317",
-        "file_size": 77,
-        "md5sum": "eb6c443a265795ca446f1c8d12f585e9",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/04aeca2317",
+        "file_size": 10689,
+        "md5sum": "851001024672d12d7f02d560c94d50e8",
         "submitter_id": "submitted_copy_number_09b9b48272",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "a722a7aa-3d86-41de-8ae5-ef54c1784860"
     },
     {
         "consent_codes": [],
@@ -83,11 +88,12 @@
         "data_format": "daeeb69a15",
         "data_type": "f032afd3ad",
         "experimental_strategy": "fc76e93c28",
-        "file_name": "fa0d844727",
-        "file_size": 71,
-        "md5sum": "ee37d3656b3abf0e099c57ef0a775a02",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/fa0d844727",
+        "file_size": 9235,
+        "md5sum": "3c4446fbac55396129808a4d283465f2",
         "submitter_id": "submitted_copy_number_c5a8182460",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "233aa9a2-9a91-48db-9c7f-c4e4aee15098"
     },
     {
         "consent_codes": [],
@@ -98,11 +104,12 @@
         "data_format": "72eef52ab7",
         "data_type": "822bb1f103",
         "experimental_strategy": "513e0682aa",
-        "file_name": "8cfd48f2c9",
-        "file_size": 22,
-        "md5sum": "8c1d37129b36cf867fbf5cd6e101ba3c",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/8cfd48f2c9",
+        "file_size": 5793,
+        "md5sum": "e2af168adc2dd7598f1444f262684a20",
         "submitter_id": "submitted_copy_number_0e1d0ca14c",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "1552a006-1ec4-4d34-9557-4b4740cf4251"
     },
     {
         "consent_codes": [],
@@ -113,11 +120,12 @@
         "data_format": "9a8eede948",
         "data_type": "0c2156544a",
         "experimental_strategy": "6d4e271bfd",
-        "file_name": "c6ab404f1f",
-        "file_size": 42,
-        "md5sum": "17f4274968e4af7cf18d1dc4440bbeed",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/c6ab404f1f",
+        "file_size": 15832,
+        "md5sum": "a552120e345ca1ef162746f95e11618e",
         "submitter_id": "submitted_copy_number_b6e038cfff",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "b4554fec-253e-42ac-b1a4-001a930b0b53"
     },
     {
         "consent_codes": [],
@@ -128,11 +136,12 @@
         "data_format": "2271bc824a",
         "data_type": "4e243c1279",
         "experimental_strategy": "0d7a809560",
-        "file_name": "36638f6c97",
-        "file_size": 76,
-        "md5sum": "a845931efee049e13d854fc55c0f60bc",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/36638f6c97",
+        "file_size": 11992,
+        "md5sum": "fbc44b050fb139fe1523ebf76673ffc3",
         "submitter_id": "submitted_copy_number_41899d190a",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "00e71d85-4643-4322-b693-a377edae4fc0"
     },
     {
         "consent_codes": [],
@@ -143,10 +152,11 @@
         "data_format": "197c76da15",
         "data_type": "7c6a840787",
         "experimental_strategy": "6ee59f44ec",
-        "file_name": "9ed239b024",
-        "file_size": 36,
-        "md5sum": "a50766bbab6ddcb4f83b5ba8c488198c",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/9ed239b024",
+        "file_size": 8325,
+        "md5sum": "50365bcee3103a5531a55c66d829b849",
         "submitter_id": "submitted_copy_number_f835488fa4",
-        "type": "submitted_copy_number"
+        "type": "submitted_copy_number",
+        "object_id": "72b53c51-1bd1-482c-b366-7b9cc2fbe73a"
     }
 ]

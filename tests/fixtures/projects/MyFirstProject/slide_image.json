@@ -8,10 +8,10 @@
         "data_format": "0a71fe3e6e",
         "data_type": "Antibody Panel Added",
         "experimental_strategy": "Diagnostic Slide",
-        "file_name": "699348c56c",
-        "file_size": 60,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/699348c56c",
+        "file_size": 15951,
         "frame_identifier": "6c431691c1",
-        "md5sum": "f6b5d76724827125655a3f1ebd9da2d0",
+        "md5sum": "4ceb2425142fae66e9aa22a5880d2ab8",
         "panel_used": "a03e5d0d85",
         "protocol_used": "629d4b7e8d",
         "run_name": "15909ff0df",
@@ -19,7 +19,8 @@
             "submitter_id": "slide_6f4a0b2f5a"
         },
         "submitter_id": "slide_image_b0d6c98833",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "9e7271b7-2fb4-432e-bbcb-4dfdcd28eba1"
     },
     {
         "cell_count": 19,
@@ -30,10 +31,10 @@
         "data_format": "932283289f",
         "data_type": "image",
         "experimental_strategy": "Diagnostic Slide",
-        "file_name": "946dca05a1",
-        "file_size": 15,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/946dca05a1",
+        "file_size": 12411,
         "frame_identifier": "0b2ecec916",
-        "md5sum": "87545ed5a7ad5593ead5390fd6ceb0dc",
+        "md5sum": "2af829e80a9abf93d4fdea1af91271d4",
         "panel_used": "98782696fd",
         "protocol_used": "ee1a1dd257",
         "run_name": "953bd878cf",
@@ -41,7 +42,8 @@
             "submitter_id": "slide_b0caa747f4"
         },
         "submitter_id": "slide_image_7c8d2af582",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "83bf4dbb-ea3e-4a51-bfee-8ca565fb28c7"
     },
     {
         "cell_count": 0,
@@ -52,10 +54,10 @@
         "data_format": "c07ce6b6df",
         "data_type": "Raw IMC Data",
         "experimental_strategy": null,
-        "file_name": "1ef8735cfc",
-        "file_size": 30,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/1ef8735cfc",
+        "file_size": 10706,
         "frame_identifier": "90538ed548",
-        "md5sum": "a660b55e581370f97130f1afa0ab2b29",
+        "md5sum": "0a39e7d8c66ed3b52e38ebb8128df545",
         "panel_used": "d0f73d0e07",
         "protocol_used": "968eceb0d5",
         "run_name": "6f32a4fbd1",
@@ -63,7 +65,8 @@
             "submitter_id": "slide_b323fa99f7"
         },
         "submitter_id": "slide_image_fc69c54d5b",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "5b6ba01a-e2e1-4b77-8c8e-0dd750ebd887"
     },
     {
         "cell_count": 1,
@@ -74,10 +77,10 @@
         "data_format": "123589334f",
         "data_type": "Raw IMC Data",
         "experimental_strategy": "Tissue Slide",
-        "file_name": "d5ddd05c27",
-        "file_size": 16,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/d5ddd05c27",
+        "file_size": 7491,
         "frame_identifier": "ffb0cb2aea",
-        "md5sum": "566191ec89b2625735ab9dee3bf48d27",
+        "md5sum": "55f9fa3f38d17758841387e52fd3d73d",
         "panel_used": "04bd8cd8fa",
         "protocol_used": "37346b0f5b",
         "run_name": "4e4f6405b8",
@@ -85,7 +88,8 @@
             "submitter_id": "slide_b902fb2d0b"
         },
         "submitter_id": "slide_image_8799c128a5",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "cb34f72d-687b-45fd-8261-0fb548900789"
     },
     {
         "cell_count": 6,
@@ -96,10 +100,10 @@
         "data_format": "f28d71270b",
         "data_type": "Single Cell Image",
         "experimental_strategy": "Diagnostic Slide",
-        "file_name": "833aeb7c06",
-        "file_size": 1,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/833aeb7c06",
+        "file_size": 3056,
         "frame_identifier": "12cd4d8a84",
-        "md5sum": "fbf7f5c36f7fc4e1b95332790d44da41",
+        "md5sum": "17e67b7fe7250b2be6aba83edd1a9c0b",
         "panel_used": "047d72d505",
         "protocol_used": "c6cd6a20b4",
         "run_name": "e97b768b80",
@@ -107,7 +111,8 @@
             "submitter_id": "slide_3582360fb6"
         },
         "submitter_id": "slide_image_7ac58414fe",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "49c6431c-1969-4229-a1d2-db37272de625"
     },
     {
         "cell_count": 1,
@@ -118,10 +123,10 @@
         "data_format": "c09c38e912",
         "data_type": "Raw IMC Data",
         "experimental_strategy": "Diagnostic Slide",
-        "file_name": "409922c93e",
-        "file_size": 50,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/409922c93e",
+        "file_size": 6348,
         "frame_identifier": "5f4d9158c9",
-        "md5sum": "fe510849db51802d70dde51ff9174aee",
+        "md5sum": "934feebb3069ba9041a9e4841ea214a1",
         "panel_used": "b4b8b380b3",
         "protocol_used": "74211ff7b1",
         "run_name": "d49f5c2782",
@@ -129,7 +134,8 @@
             "submitter_id": "slide_02653d9653"
         },
         "submitter_id": "slide_image_7215aa3b1d",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "2bf4ce08-00a8-448b-800c-44ea38160d88"
     },
     {
         "cell_count": 93,
@@ -140,10 +146,10 @@
         "data_format": "2341c04b0f",
         "data_type": "image",
         "experimental_strategy": "Tissue Slide",
-        "file_name": "c022dd7b38",
-        "file_size": 63,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/c022dd7b38",
+        "file_size": 11104,
         "frame_identifier": "bedffec5ab",
-        "md5sum": "94c98f4d1ffca14f093250b21db0d611",
+        "md5sum": "bc6f47dc3eaf79c7145017f2a4701e2e",
         "panel_used": "e9aceb235c",
         "protocol_used": "84c24982e8",
         "run_name": "5e9697af7a",
@@ -151,7 +157,8 @@
             "submitter_id": "slide_c83115620c"
         },
         "submitter_id": "slide_image_3535f27f71",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "6ba5a6e1-1c3c-4164-8a1c-d494b4cdce5f"
     },
     {
         "cell_count": 47,
@@ -162,10 +169,10 @@
         "data_format": "b06763cfc5",
         "data_type": "Raw IMC Data",
         "experimental_strategy": null,
-        "file_name": "a22ead8a49",
-        "file_size": 6,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/a22ead8a49",
+        "file_size": 7988,
         "frame_identifier": "15e3b1bddc",
-        "md5sum": "a94f6098533d3a11d81af791840719b3",
+        "md5sum": "58575788c0ca09d9bc4422121a9033bd",
         "panel_used": "55ce419235",
         "protocol_used": "2123082a28",
         "run_name": "63d0e41d32",
@@ -173,7 +180,8 @@
             "submitter_id": "slide_56662c26e2"
         },
         "submitter_id": "slide_image_c72e68a7fd",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "dd6ca1e7-a251-4e68-8c28-772c9c74618b"
     },
     {
         "cell_count": 35,
@@ -184,10 +192,10 @@
         "data_format": "8ef6e5a547",
         "data_type": "Raw IMC Data",
         "experimental_strategy": "Diagnostic Slide",
-        "file_name": "42c564499e",
-        "file_size": 22,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/42c564499e",
+        "file_size": 5248,
         "frame_identifier": "37d39bc51c",
-        "md5sum": "8be466bd99a9142f08278d2cf538980a",
+        "md5sum": "3dad42ebeac8d6863b2abe0d2e27d6dd",
         "panel_used": "d23ebcd4c5",
         "protocol_used": "2dc13cab9a",
         "run_name": "012fdb25cb",
@@ -195,7 +203,8 @@
             "submitter_id": "slide_0c18a6131f"
         },
         "submitter_id": "slide_image_3d6e8b0a4b",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "9c84316e-28bd-4d9a-a9ae-f2e2b0b0f30a"
     },
     {
         "cell_count": 28,
@@ -206,10 +215,10 @@
         "data_format": "fe4be5deea",
         "data_type": "Single Channel IMC Image",
         "experimental_strategy": null,
-        "file_name": "877fb7b65d",
-        "file_size": 45,
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/877fb7b65d",
+        "file_size": 3549,
         "frame_identifier": "9d4cd8025e",
-        "md5sum": "f060687fa5c2d00ae10cbfc866ad7a84",
+        "md5sum": "060db537d91e5b2fa1d83176d23d37e8",
         "panel_used": "e0a0bfae4c",
         "protocol_used": "c22f9cfdfa",
         "run_name": "0ee3bb9530",
@@ -217,6 +226,7 @@
             "submitter_id": "slide_5a4c7f6dd7"
         },
         "submitter_id": "slide_image_896e845d31",
-        "type": "slide_image"
+        "type": "slide_image",
+        "object_id": "5d0d0259-b4e2-4b2b-a144-231906f14a21"
     }
 ]

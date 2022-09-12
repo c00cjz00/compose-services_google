@@ -5,14 +5,15 @@
         "data_format": "BAM",
         "data_type": "Aligned Reads",
         "experimental_strategy": "miRNA-Seq",
-        "file_name": "83040a62c9",
-        "file_size": 77,
-        "md5sum": "b2b73f75c08c19cdd6cf1477d7104fb5",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/83040a62c9",
+        "file_size": 15021,
+        "md5sum": "c782545c0d08dcf63c55980d31bb8717",
         "read_groups": {
             "submitter_id": "read_group_f0cf62050c"
         },
         "submitter_id": "submitted_aligned_reads_0a797b970e",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "97d02bf7-6791-4359-8f16-506eefc42781"
     },
     {
         "consent_codes": [],
@@ -20,14 +21,15 @@
         "data_format": "BAM",
         "data_type": "Alignment Coordinates",
         "experimental_strategy": "Low Pass WGS",
-        "file_name": "22a54a64f8",
-        "file_size": 56,
-        "md5sum": "e77fc74f0acb4cfa5cae1b0f9a2464b9",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/22a54a64f8",
+        "file_size": 9852,
+        "md5sum": "35e0d84e990ad6fd48eab7308804bdde",
         "read_groups": {
             "submitter_id": "read_group_d60aefd861"
         },
         "submitter_id": "submitted_aligned_reads_13f9aad254",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "24a6633d-8dbd-44ef-a0f1-08b7bfef3775"
     },
     {
         "consent_codes": [],
@@ -35,14 +37,15 @@
         "data_format": "BED",
         "data_type": "Aligned Reads",
         "experimental_strategy": "WGS",
-        "file_name": "a0c1150b66",
-        "file_size": 71,
-        "md5sum": "3071bfecf9538807e49a998cecf7ddd9",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/a0c1150b66",
+        "file_size": 13707,
+        "md5sum": "3fac456c0a1c087e1fb9737a05046765",
         "read_groups": {
             "submitter_id": "read_group_97b9f3a09c"
         },
         "submitter_id": "submitted_aligned_reads_8f7bf3ca00",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "c1660fb0-5403-4f21-a7ae-90fd8348aa8f"
     },
     {
         "consent_codes": [],
@@ -50,14 +53,15 @@
         "data_format": "BAM",
         "data_type": "Aligned Reads",
         "experimental_strategy": "WGS",
-        "file_name": "d70a41aa9c",
-        "file_size": 5,
-        "md5sum": "859647bea4fb63457a0322367448c982",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/d70a41aa9c",
+        "file_size": 11896,
+        "md5sum": "62645dc4a1d3e5d35b4d687a715daabb",
         "read_groups": {
             "submitter_id": "read_group_87934435e4"
         },
         "submitter_id": "submitted_aligned_reads_96e8945551",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "70dfe57b-41cb-44f1-8581-864d751c2fe3"
     },
     {
         "consent_codes": [],
@@ -65,14 +69,15 @@
         "data_format": "BED",
         "data_type": "Alignment Coordinates",
         "experimental_strategy": "Low Pass WGS",
-        "file_name": "21436f7f87",
-        "file_size": 12,
-        "md5sum": "ae84fa7d2bfb192c7a056abac20d4d66",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/21436f7f87",
+        "file_size": 15952,
+        "md5sum": "45846156ac8a0effb800507cc90e6932",
         "read_groups": {
             "submitter_id": "read_group_46efa8704d"
         },
         "submitter_id": "submitted_aligned_reads_52ac721961",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "47d27685-5c42-44fb-88e6-28715a37b371"
     },
     {
         "consent_codes": [],
@@ -80,14 +85,15 @@
         "data_format": "BAM",
         "data_type": "Aligned Reads",
         "experimental_strategy": "miRNA-Seq",
-        "file_name": "4f57cc90ad",
-        "file_size": 77,
-        "md5sum": "11f2e3b3e73cc1e14b85803c8016cb27",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/4f57cc90ad",
+        "file_size": 4979,
+        "md5sum": "d129c4a411583daeb64057ca0e81a606",
         "read_groups": {
             "submitter_id": "read_group_13370d92c6"
         },
         "submitter_id": "submitted_aligned_reads_e26545035e",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "4582e668-fe77-427c-8bf7-0c7ed610f8b9"
     },
     {
         "consent_codes": [],
@@ -95,14 +101,15 @@
         "data_format": "BED",
         "data_type": "Alignment Coordinates",
         "experimental_strategy": "Low Pass WGS",
-        "file_name": "9fb69ac2ca",
-        "file_size": 53,
-        "md5sum": "fdd10c091165c48802b25037efefa33f",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/9fb69ac2ca",
+        "file_size": 14079,
+        "md5sum": "d426c8049d6ce30c51efbd03e087de86",
         "read_groups": {
             "submitter_id": "read_group_d8f57d6e60"
         },
         "submitter_id": "submitted_aligned_reads_7f2052ab73",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "41ea08f9-1243-4115-aa22-a573a3e1e379"
     },
     {
         "consent_codes": [],
@@ -110,14 +117,15 @@
         "data_format": "BED",
         "data_type": "Alignment Coordinates",
         "experimental_strategy": "WGS",
-        "file_name": "eced2b8e5a",
-        "file_size": 81,
-        "md5sum": "7dce7250d89e3170ff88b2ab87a31ab2",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/eced2b8e5a",
+        "file_size": 7302,
+        "md5sum": "0467a8bf682c560520a72505224cc1bf",
         "read_groups": {
             "submitter_id": "read_group_fda909e6d3"
         },
         "submitter_id": "submitted_aligned_reads_4475802174",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "7dab633e-0d35-4424-8ed2-4eb8df9dccad"
     },
     {
         "consent_codes": [],
@@ -125,14 +133,15 @@
         "data_format": "BAM",
         "data_type": "Alignment Coordinates",
         "experimental_strategy": "DNA Panel",
-        "file_name": "604ec44dfb",
-        "file_size": 15,
-        "md5sum": "ee60d70033e5b222fa2a90c9e3a37272",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/604ec44dfb",
+        "file_size": 13074,
+        "md5sum": "90a66c94bc81d806e6d4761cf85caa55",
         "read_groups": {
             "submitter_id": "read_group_8d4f758280"
         },
         "submitter_id": "submitted_aligned_reads_31bdbd137f",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "94731e87-77c3-435d-adbc-682f511d7ed5"
     },
     {
         "consent_codes": [],
@@ -140,13 +149,14 @@
         "data_format": "BAM",
         "data_type": "Aligned Reads",
         "experimental_strategy": "RNA-Seq",
-        "file_name": "31f9738fd1",
-        "file_size": 37,
-        "md5sum": "2c8ff14251f9ca956a7bc749b063cd36",
+        "file_name": "tests/fixtures/projects/MyFirstProject/DATA/31f9738fd1",
+        "file_size": 8348,
+        "md5sum": "bcccf6c237e54be07dccf4f8177fb84e",
         "read_groups": {
             "submitter_id": "read_group_c8a6fa2d29"
         },
         "submitter_id": "submitted_aligned_reads_46b03cdbc1",
-        "type": "submitted_aligned_reads"
+        "type": "submitted_aligned_reads",
+        "object_id": "260fb76b-8dfe-4364-80bf-9baab94b8a5f"
     }
 ]
