@@ -498,7 +498,7 @@ def read_files(sc, batch_size):
 
                 source_ = {
                     "node_id":  f['id'],
-                    "object_id":  f"object_{f['id']}",
+                    "object_id":  f['object_id'],
                     "source_node": "file",
                     "auth_resource_path": f"/programs/{program}/projects/{project}",
                     '_file_id': f['id'],
