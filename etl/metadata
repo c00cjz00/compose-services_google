@@ -187,7 +187,7 @@ def upload_metadata(path, program, project, submission_client, batch_size):
                     logger.debug('creating program')
                     response = submission_client.create_program(
                         {'name': program, 'dbgap_accession_number': program, 'type': 'program'})
-                    assert response, 'could not parse response {}'.format(r)
+                    assert response, 'could not parse response {}'.format(response)
                     # assert 'code' in response, f'Unexpected response {response}'
                     # assert response['code'] == 200, 'could not create {} program'.format(response)
                     assert 'id' in response, 'could not create {} program'.format(response)
@@ -335,7 +335,7 @@ def drop_program(ctx, data_directory, program):
 
 
 @cli.command()
-@click.option('--data_directory', default='testData', show_default=True,
+@click.option('--data_directory', default=None, required=True, show_default=True,
               help='directory that contains <entity>.json')
 @click.option('--program', default=None, show_default=True,
               help='Gen3 "program"')
