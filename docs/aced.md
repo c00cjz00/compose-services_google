@@ -100,14 +100,21 @@
   * Create a program (MyFirstProgram) and project (MyFirstProject).  See https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#programs-and-projects
 
 
-  * Let's generate some data
+  * Let's generate some synthetic meta data
 
-        ```
-        export TEST_DATA_PATH="$(pwd)/tests/fixtures/projects/MyFirstProject"
-        mkdir -p "$TEST_DATA_PATH"
+       ```
+       export TEST_DATA_PATH="$(pwd)/tests/fixtures/projects/MyFirstProject"
+       mkdir -p "$TEST_DATA_PATH"
+    
+       docker run -it -v "${TEST_DATA_PATH}:/mnt/data" --rm --name=dsim --entrypoint=data-simulator quay.io/cdis/data-simulator:master simulate --url https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json --path /mnt/data --program MyFirstProgram --project MyFirstProject --max_samples 10
+       ```
 
-        docker run -it -v "${TEST_DATA_PATH}:/mnt/data" --rm --name=dsim --entrypoint=data-simulator quay.io/cdis/data-simulator:master simulate --url https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json --path /mnt/data --program MyFirstProgram --project MyFirstProject --max_samples 10
-        ```
+  * Now, let's generate corresponding data files
+
+    ```commandline
+    ./etl/file --gen3_credentials_file <your-credential-file>  upload --project_path tests/fixtures/projects/MyFirstProject/
+    ```
+
 
   * Load the data manually by following the [instructions](https://gen3.org/resources/user/submit-data/#begin-metadata-tsv-submissions)
         (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
@@ -364,6 +371,20 @@ index 62c536d..0a0f03f 100644
 * Enable fence URL signing
     * see AWS_CREDENTIALS, S3_BUCKETS in Secrets/fence-config.yml
 
+* Now, let's empty the project, then re-create the project end to end.
+
+  ```commandline
+  # empty the project
+  ./etl/metadata --gen3_credentials_file <your-credential-file> empty --program MyFirstProgram --project MyFirstProject
+  # upload the data files
+  ./etl/file --gen3_credentials_file <your-credential-file>  upload --project_path tests/fixtures/projects/MyFirstProject/
+  # upload the meta data
+  ./etl/metadata --gen3_credentials_file <your-credential-file>  load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
+  # re-create the elastic search indices
+  bash ./guppy_setup.sh  <your-credential-file>  
+  ```
+
+
 
 
 
@@ -375,16 +396,6 @@ Investigate indexing tools: https://github.com/jacquayj/gen3-s3indexer-extramura
 
 Add to /etc/hosts, ngnix.conf, docker-compose, fence-conf
 
-```commandline
-127.0.0.1 minio-ohsu.compbio.ohsu.edu
-127.0.0.1 minio-ohsu-console.compbio.ohsu.edu
-127.0.0.1 minio-ucl.compbio.ohsu.edu
-127.0.0.1 minio-ucl-console.compbio.ohsu.edu
-127.0.0.1 minio-manchester.compbio.ohsu.edu
-127.0.0.1 minio-manchester-console.compbio.ohsu.edu
-127.0.0.1 minio-stanford.compbio.ohsu.edu
-127.0.0.1 minio-stanford-console.compbio.ohsu.edu
-```
 
 ## Let's setup discovery
 
