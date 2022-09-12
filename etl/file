@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import io
 import json
 import os
 import logging
+from pathlib import Path
+
 import click
 import jwt
 import requests
@@ -76,47 +77,132 @@ def file_attributes(file_name):
 
 @cli.command()
 @click.option('--file_name', default=None, show_default=True,
-              help='File name to upload')
+              help='file name to upload')
 @click.pass_context
-def upload(ctx, file_name):
-    """Upload file_name, update hashes and size."""
+def index(ctx, file_name):
+    """index manifest url, update hashes and size."""
+    urls = ['s3://minio-ohsu.compbio.ohsu.edu/aced-ohsu/test.txt']
+    hashes = {'md5': '7b445c281def0c33d0bb3535f7525107'}
+    size = 499
+    file_name = 'test.txt'
+    authz = ['/programs/MyFirstProgram/projects/MyFirstProject']  #
 
-    file_client = ctx.obj['file_client']
-    document = file_client.upload_file(file_name)
-    assert 'guid' in document, document
-    assert 'url' in document, document
-    signed_url = urllib.parse.unquote(document['url'])
-    guid = document['guid']
-    files = {'file': open(file_name, 'rb')}
-    r = requests.put(signed_url, files=files)
-    assert r.status_code == 200, (signed_url, r.text)
-    get_logger_("upload").info(f"Successfully uploaded file \"{file_name}\" to GUID {guid}")
-    index_client = ctx.obj['index_client']
-    md5_, size_ = file_attributes(file_name)
-    record = index_client.get_record(guid)
-    assert 'rev' in record, record
-    rev = record['rev']
-    r = index_client.update_blank(guid, rev, hashes={'md5': md5_}, size=size_)
-    assert r['size'] == size_, ("Unexpected size", r)
-    get_logger_("upload").info(f'Successfully updated hash and size {(md5_, size_)}')
+    result = ctx.obj['index_client'].create_record(hashes=hashes, urls=urls, size=size, file_name=file_name,
+                                                   authz=authz)
+    print("create_record", result)
 
 
 @cli.command()
-@click.option('--file_name', default=None, show_default=True,
-              help='File name to upload')
+@click.option('--did', default=None, show_default=True,
+              help='GUID from indexd')
 @click.pass_context
-def download(ctx, file_name):
-    """Download file_name."""
+def get_index(ctx, did):
+    """Read index."""
+    assert did, "Missing did (guid) parameter"
+    result = ctx.obj['index_client'].get_record(did)
+    print("record", result)
+    result = ctx.obj['file_client'].get_presigned_url(did)
+    print("presigned_url", result)
 
+
+@cli.command()
+@click.option('--bucket_name', default='aced-default', show_default=True,
+              help='File name to upload')
+@click.option('--project_path', required=True, default=None, show_default=True,
+              help='Path to metadata data')
+@click.option('--program', default='MyFirstProgram', show_default=True,
+              help='Gen3 program')
+@click.option('--project', default='MyFirstProject', show_default=True,
+              help='Gen3 project')
+@click.pass_context
+def upload(ctx, bucket_name, project_path, program, project):
+    """Upload file_name to default gen3 bucket, update hashes and size."""
+
+    project_path = Path(project_path)
+    index_client = ctx.obj['index_client']
     file_client = ctx.obj['file_client']
-    document = file_client.upload_file(file_name)
-    assert 'guid' in document, document
-    assert 'url' in document, document
-    signed_url = urllib.parse.unquote(document['url'])
-    files = {'file': open(file_name, 'rb')}
-    r = requests.put(signed_url, files=files)
-    assert r.status_code == 200, (signed_url, r.text)
-    print('OK')
+
+    for synthetic_data_path in list(project_path.glob('**/*.json')):
+        updated_records = []
+        for record in json.load(open(synthetic_data_path, "r")):
+            if 'file_name' not in record:
+                break
+
+            object_name = record['file_name'].lstrip('/')
+            synthetic_file_path = f"{record['file_name']}"
+
+            # create a record in gen3, get a signed url
+            document = file_client.upload_file(object_name)
+            assert 'guid' in document, document
+            assert 'url' in document, document
+            signed_url = urllib.parse.unquote(document['url'])
+            guid = document['guid']
+            hashes = {'md5': record['md5sum']}
+            metadata = {
+                **{
+                    'datanode_type': record['type'],
+                    'datanode_submitter_id': record['submitter_id'],
+                    'datanode_object_id': guid
+                },
+                **hashes}
+
+            # open the file and upload it to the signed url returned above
+            with open(record['file_name'], 'rb') as data:
+                headers = {}
+                for key, value in metadata.items():
+                    headers[f"x-amz-meta-{key}"] = value
+                r = requests.put(signed_url, data=data, headers=headers)
+                assert r.status_code == 200, (signed_url, r.text)
+                get_logger_("upload").info(f"Successfully uploaded file \"{record['file_name']}\" to GUID {guid}")
+
+            # update the indexd record with urls, authz, size and hashes
+            indexd_record = index_client.get_record(guid)
+            assert 'rev' in indexd_record, record
+            rev = indexd_record['rev']
+            r = index_client.update_blank(guid, rev, hashes=hashes, size=record["file_size"])
+
+            urls = [f"s3://{bucket_name}/{guid}/{object_name}"]
+            authz = [f'/programs/{program}/projects/{project}']
+
+            result = index_client.update_record(guid=guid, version=rev, file_name=record['file_name'],
+                                                authz=authz, urls=urls,
+                                                metadata=metadata)
+
+            record['object_id'] = guid
+            updated_records.append(record)
+
+        if len(updated_records) > 0:
+            with open(synthetic_data_path, "w") as fp:
+                json.dump(updated_records, fp, indent=4)
+                print(f"Uploaded data and update object_id in records in {synthetic_data_path}")
+
+
+@cli.command()
+@click.option('--did', default=None, show_default=True,
+              help='GUID from indexd')
+@click.option('--file_name', default=None, show_default=True,
+              help='output path')
+@click.pass_context
+def download(ctx, did, file_name):
+    """Download file_name."""
+    assert did, "Missing did (guid) parameter"
+    result = ctx.obj['file_client'].get_presigned_url(did)
+    assert 'url' in result, result
+    presigned_url = result['url']
+    if not file_name:
+        result = ctx.obj['index_client'].get_record(did)
+        file_name = result['file_name']
+
+    # NOTE the stream=True parameter below
+    # see https://stackoverflow.com/questions/16694907/download-large-file-in-python-with-requests
+    with requests.get(presigned_url, allow_redirects=True, stream=True) as r:
+        r.raise_for_status()
+        with open(file_name, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                # If you have chunk encoded response uncomment if
+                # and set chunk_size parameter to None.
+                #if chunk:
+                f.write(chunk)
 
 
 if __name__ == '__main__':
