@@ -45,7 +45,8 @@ def file_attributes(file_name):
               help='Path to synthetic data')
 @click.pass_context
 def cli(ctx, project_path, output_path):
-    """Read synthetic data, generate synthetic data file."""
+    """Read synthetic meta data, generate synthetic data file for indexd,
+     updates datanode with file_name, _size and md5."""
     ctx.ensure_object(dict)
     project_path = Path(project_path)
     pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
