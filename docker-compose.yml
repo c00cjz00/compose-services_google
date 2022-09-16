@@ -20,11 +20,14 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
   indexd-service:
-    image: "quay.io/cdis/indexd:2021.03"
+    image: "quay.io/cdis/indexd:2022.09"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
       - devnet
+    environment:
+      # https://github.com/uc-cdis/indexd/blob/b1eb4824eecf668b82bafe47304d772526d96d10/indexd/app.py#L27
+      - PRESIGNED_FENCE_URL=http://fence-service
     volumes:
       - ./Secrets/indexd_settings.py:/var/www/indexd/local_settings.py
       - ./Secrets/indexd_creds.json:/var/www/indexd/creds.json
@@ -82,7 +85,7 @@ services:
       timeout: 5s
       retries: 10
     depends_on:
-      - postgres  
+      - postgres
   metadata-service:
     # update image
     image: "quay.io/cdis/metadata-service:1.8.0"
@@ -90,6 +93,9 @@ services:
     depends_on:
       - postgres
     volumes:
+      # To load:
+      # scripts/discovery_metadata.sh
+      # Also interesting:
       # /env/bin/python /src/src/mds/populate.py --config /var/local/metadata-service/aggregate_config.json
       - ./Secrets/metadata/aggregate_config.json:/var/local/metadata-service/aggregate_config.json
     environment:
@@ -97,9 +103,10 @@ services:
       - DB_USER=metadata_user
       - DB_PASSWORD=metadata_pass
       - DB_DATABASE=metadata
-      # config required by 1.8
-      - USE_AGG_MDS=true
-      - GEN3_ES_ENDPOINT=http://esproxy-service:9200      
+      - DEBUG=true
+      - USE_AGG_MDS=false
+      - AGG_MDS_NAMESPACE=default_namespace
+      - GEN3_ES_ENDPOINT=http://esproxy-service:9200
     command: >
       sh -c "/env/bin/alembic upgrade head && /env/bin/uvicorn --host 0.0.0.0 --port 80 mds.asgi:app --reload"
     networks:
@@ -217,7 +224,7 @@ services:
     depends_on:
       - peregrine-service
   portal-service:
-    image: "quay.io/cdis/data-portal:2021.03"
+    image: "quay.io/cdis/data-portal:3.33.0"  # 2021.03
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     deploy:
