@@ -1,7 +1,7 @@
 export MINIO_TEST_USER=test
 export MINIO_TEST_PASSWORD=testtest
-export $MINIO_ADMIN_USER=minioadmin
-export $MINIO_ADMIN_USER=minioadmin
+export MINIO_ADMIN_USER=minioadmin
+export MINIO_ADMIN_PASSWORD=minioadmin
 
 mc alias set default http://minio-default:9000 $MINIO_ADMIN_USER $MINIO_ADMIN_PASSWORD
 mc alias set ohsu http://minio-ohsu:9000 $MINIO_ADMIN_USER $MINIO_ADMIN_PASSWORD
@@ -27,3 +27,10 @@ mc admin policy set ohsu readwrite user=$MINIO_TEST_USER
 mc admin policy set ucl readwrite user=$MINIO_TEST_USER
 mc admin policy set manchester readwrite user=$MINIO_TEST_USER
 mc admin policy set stanford readwrite user=$MINIO_TEST_USER
+
+mc event add default/aced-default arn:minio:sqs::PRIMARY:webhook
+mc event add ohsu/aced-ohsu arn:minio:sqs::PRIMARY:webhook
+mc event add ucl/aced-ucl arn:minio:sqs::PRIMARY:webhook
+mc event add manchester/aced-manchester arn:minio:sqs::PRIMARY:webhook
+mc event add stanford/aced-stanford arn:minio:sqs::PRIMARY:webhook
+
