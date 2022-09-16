@@ -16,4 +16,12 @@ until curl -f -s -o /dev/null http://peregrine-service/v0/submission/getschema ;
 done
 
 echo "both services are ready"
+
+echo START - trace data oriented setup
+npm run schema
+cat ./data/gqlSetup.js
+node ./data/gqlSetup.js
+echo END - trace data oriented setup
+
+
 bash ./dockerStart.sh
