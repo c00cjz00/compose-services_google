@@ -391,10 +391,6 @@ index 62c536d..0a0f03f 100644
 TODO (remainder of doc is work in progress)
 =====
 
-## Setup buckets for partners.  
-Investigate indexing tools: https://github.com/jacquayj/gen3-s3indexer-extramural
-
-Add to /etc/hosts, ngnix.conf, docker-compose, fence-conf
 
 
 ## Let's setup discovery
@@ -422,5 +418,6 @@ Add to /etc/hosts, ngnix.conf, docker-compose, fence-conf
 ```
 
 
+* Update gitops.json
 
-
+    See example/Secrets
