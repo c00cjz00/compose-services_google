@@ -12,7 +12,7 @@
         "md5sum": "8532059787da212aebc9d9ff69c0fffe",
         "submitter_id": "experimental_metadata_24deea753f",
         "type": "experimental_metadata",
-        "object_id": "5a6a7379-8a2f-49a5-bd06-12c16a9e40c0"
+        "object_id": "FOOBAR:7f7937a3-6fed-43df-b654-9c25fbfa77af"
     },
     {
         "consent_codes": [],
@@ -27,7 +27,7 @@
         "md5sum": "c7b395c18a04dd99ef119bbcadb27e36",
         "submitter_id": "experimental_metadata_c9e282160d",
         "type": "experimental_metadata",
-        "object_id": "239148cb-19f0-4b93-a14e-d89e8b11b177"
+        "object_id": "FOOBAR:4e1e8388-3bdd-4e16-9141-6040685ed6be"
     },
     {
         "consent_codes": [],
@@ -42,7 +42,7 @@
         "md5sum": "e434360a78b1bcb004ce830162d63b6f",
         "submitter_id": "experimental_metadata_8ce1164060",
         "type": "experimental_metadata",
-        "object_id": "cb91e1c4-df7f-4536-af54-1378d1519449"
+        "object_id": "FOOBAR:a98580bf-9e47-4ed3-8498-ac2b8f12d42e"
     },
     {
         "consent_codes": [],
@@ -57,7 +57,7 @@
         "md5sum": "beab90a4d652e2d89484ba2ea66865d3",
         "submitter_id": "experimental_metadata_60d565064d",
         "type": "experimental_metadata",
-        "object_id": "41f33c14-7625-4a4e-83e1-5f6d6666e160"
+        "object_id": "FOOBAR:3eccdf39-a898-4ed8-9ba8-0b085a6be5e7"
     },
     {
         "consent_codes": [],
@@ -72,7 +72,7 @@
         "md5sum": "9d60bf33db4d0e773c387c580b90a377",
         "submitter_id": "experimental_metadata_95aa02dc63",
         "type": "experimental_metadata",
-        "object_id": "5c18e7ce-d3c4-41e6-9ceb-72a389167004"
+        "object_id": "FOOBAR:72b6e2c8-5044-4b64-886f-25a37f7491a0"
     },
     {
         "consent_codes": [],
@@ -87,7 +87,7 @@
         "md5sum": "bfdc9420c8ebe920cab1cf69a1de242e",
         "submitter_id": "experimental_metadata_aed3dd343f",
         "type": "experimental_metadata",
-        "object_id": "6d23ecc2-a153-4063-abff-842cffe1b286"
+        "object_id": "FOOBAR:3743717c-e60a-4bfe-9bd2-26f8acb60f50"
     },
     {
         "consent_codes": [],
@@ -102,7 +102,7 @@
         "md5sum": "2d2a1337ff973c9ea70bd93a9b3ba281",
         "submitter_id": "experimental_metadata_d456e80dd9",
         "type": "experimental_metadata",
-        "object_id": "a52ba5c0-ad94-4399-921b-f68ce3b31dd9"
+        "object_id": "FOOBAR:3e3072a7-bbb0-42f9-a6b1-2352a42856c8"
     },
     {
         "consent_codes": [],
@@ -117,7 +117,7 @@
         "md5sum": "ebb8dde6516246a1189d91aeb9b08802",
         "submitter_id": "experimental_metadata_2af9dba14a",
         "type": "experimental_metadata",
-        "object_id": "d634e770-fab5-4c4b-953f-d7da1bcb44aa"
+        "object_id": "FOOBAR:5bf3a99e-3297-4679-b40b-6c298568bfd1"
     },
     {
         "consent_codes": [],
@@ -132,7 +132,7 @@
         "md5sum": "76f47a63fba143c8e2ee31805ef48f91",
         "submitter_id": "experimental_metadata_c27b3bc1c5",
         "type": "experimental_metadata",
-        "object_id": "69cb35f3-e68c-41ee-bc70-9ea4d2a40ff2"
+        "object_id": "FOOBAR:d3710d42-7ddc-48b3-a11d-85ad265ee8cf"
     },
     {
         "consent_codes": [],
@@ -147,6 +147,6 @@
         "md5sum": "36b3a8b9bea4a393e1e0275a4d8548df",
         "submitter_id": "experimental_metadata_ed774ad907",
         "type": "experimental_metadata",
-        "object_id": "c58de4c5-4c1b-4c50-9293-a39b7ddec229"
+        "object_id": "FOOBAR:9d4cf642-955f-482c-9eb8-d0aac45274c9"
     }
 ]

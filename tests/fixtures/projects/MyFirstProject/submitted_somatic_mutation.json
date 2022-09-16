@@ -14,7 +14,7 @@
         "submitter_id": "submitted_somatic_mutation_01866f2846",
         "total_variants": 46,
         "type": "submitted_somatic_mutation",
-        "object_id": "51e62229-a55e-46c3-8eb3-b76d974e5aa2"
+        "object_id": "FOOBAR:0b93276e-3c55-46b3-9e6b-47b9f108d2bb"
     },
     {
         "consent_codes": [],
@@ -31,7 +31,7 @@
         "submitter_id": "submitted_somatic_mutation_82b868c683",
         "total_variants": 21,
         "type": "submitted_somatic_mutation",
-        "object_id": "7f1baee7-0d6c-41c7-8386-ec33d4ebbc8d"
+        "object_id": "FOOBAR:8f834fe4-8e93-4b91-a567-ef5f035db990"
     },
     {
         "consent_codes": [],
@@ -48,7 +48,7 @@
         "submitter_id": "submitted_somatic_mutation_00d3ca7b36",
         "total_variants": 93,
         "type": "submitted_somatic_mutation",
-        "object_id": "efb640c7-b2f6-44a6-921c-94a36d708229"
+        "object_id": "FOOBAR:8db8c301-4a57-4e91-9ba4-7c300f28c39a"
     },
     {
         "consent_codes": [],
@@ -65,7 +65,7 @@
         "submitter_id": "submitted_somatic_mutation_049b6b40d1",
         "total_variants": 85,
         "type": "submitted_somatic_mutation",
-        "object_id": "5291a915-19d8-4107-a654-f5d27e7a8a65"
+        "object_id": "FOOBAR:934575aa-6737-4878-95cf-5c40c48499ba"
     },
     {
         "consent_codes": [],
@@ -82,7 +82,7 @@
         "submitter_id": "submitted_somatic_mutation_a7d7f41864",
         "total_variants": 24,
         "type": "submitted_somatic_mutation",
-        "object_id": "d24febec-3d1e-4f7c-a12d-e5b97dcef731"
+        "object_id": "FOOBAR:e98adc2b-34c1-4455-8330-6d8ebd3fdcf6"
     },
     {
         "consent_codes": [],
@@ -99,7 +99,7 @@
         "submitter_id": "submitted_somatic_mutation_4ff130ad8e",
         "total_variants": 86,
         "type": "submitted_somatic_mutation",
-        "object_id": "40a742c9-b081-43d6-b5cb-3fc010a0d758"
+        "object_id": "FOOBAR:54e56bc7-3458-41e2-8962-cc67d576c34a"
     },
     {
         "consent_codes": [],
@@ -116,7 +116,7 @@
         "submitter_id": "submitted_somatic_mutation_d5159ceafa",
         "total_variants": 49,
         "type": "submitted_somatic_mutation",
-        "object_id": "e19b8957-0a54-496b-b909-e3b3f8e7af2f"
+        "object_id": "FOOBAR:c861d83b-de5a-434a-8285-241a38abd5d3"
     },
     {
         "consent_codes": [],
@@ -133,7 +133,7 @@
         "submitter_id": "submitted_somatic_mutation_e838011b59",
         "total_variants": 50,
         "type": "submitted_somatic_mutation",
-        "object_id": "0134d5eb-6c09-424f-bf18-2376ccd3b473"
+        "object_id": "FOOBAR:22fd6027-bc34-4970-9f20-65f15ac3668d"
     },
     {
         "consent_codes": [],
@@ -150,7 +150,7 @@
         "submitter_id": "submitted_somatic_mutation_8ba277f1de",
         "total_variants": 20,
         "type": "submitted_somatic_mutation",
-        "object_id": "d8ce3ff3-7b4a-439c-98c1-4525d9e28886"
+        "object_id": "FOOBAR:827e4fb5-3399-4904-9bbd-ae8f245804c2"
     },
     {
         "consent_codes": [],
@@ -167,6 +167,6 @@
         "submitter_id": "submitted_somatic_mutation_9ded0e8409",
         "total_variants": 97,
         "type": "submitted_somatic_mutation",
-        "object_id": "71b3371a-814f-4fb0-b776-cf966d1335e9"
+        "object_id": "FOOBAR:77430b9e-7a92-431d-9a50-15252f0c3317"
     }
 ]

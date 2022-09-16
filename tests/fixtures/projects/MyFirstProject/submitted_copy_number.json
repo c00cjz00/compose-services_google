@@ -13,7 +13,7 @@
         "md5sum": "f722106c807ded7d0e9e65e30a3d2166",
         "submitter_id": "submitted_copy_number_6f3cf67a90",
         "type": "submitted_copy_number",
-        "object_id": "961d53ec-b90b-4a71-889c-1fa024dbfe03"
+        "object_id": "FOOBAR:38eb72b3-dcdd-4850-85a3-c703af94e8b7"
     },
     {
         "consent_codes": [],
@@ -29,7 +29,7 @@
         "md5sum": "52a78bf320aa5d0e9c6969c37c49f60c",
         "submitter_id": "submitted_copy_number_de4fe987b3",
         "type": "submitted_copy_number",
-        "object_id": "a70b43cd-bd56-4cbe-acdf-2562489981e6"
+        "object_id": "FOOBAR:2eb43bdd-a410-4204-ab19-632778058c16"
     },
     {
         "consent_codes": [],
@@ -45,7 +45,7 @@
         "md5sum": "dadca966e0d2d7a9d890841e6566566a",
         "submitter_id": "submitted_copy_number_063a4e14cd",
         "type": "submitted_copy_number",
-        "object_id": "02fc8c4a-8504-445f-af9f-ad04da7f3394"
+        "object_id": "FOOBAR:0f832d4f-ed6c-4ab8-a408-4eeed1c7b42f"
     },
     {
         "consent_codes": [],
@@ -61,7 +61,7 @@
         "md5sum": "cf9cec9f92c2f1d958c19b67315eb495",
         "submitter_id": "submitted_copy_number_cc81c5b825",
         "type": "submitted_copy_number",
-        "object_id": "676553c9-df60-4f68-8dd0-aa31f1773c54"
+        "object_id": "FOOBAR:2708d7d0-3c7d-4e43-a0b4-666c3a98c354"
     },
     {
         "consent_codes": [],
@@ -77,7 +77,7 @@
         "md5sum": "851001024672d12d7f02d560c94d50e8",
         "submitter_id": "submitted_copy_number_09b9b48272",
         "type": "submitted_copy_number",
-        "object_id": "a722a7aa-3d86-41de-8ae5-ef54c1784860"
+        "object_id": "FOOBAR:20e2ee41-c0b4-4eea-a5bd-de28c63562c2"
     },
     {
         "consent_codes": [],
@@ -93,7 +93,7 @@
         "md5sum": "3c4446fbac55396129808a4d283465f2",
         "submitter_id": "submitted_copy_number_c5a8182460",
         "type": "submitted_copy_number",
-        "object_id": "233aa9a2-9a91-48db-9c7f-c4e4aee15098"
+        "object_id": "FOOBAR:2bd66f1a-3ffb-4fd2-a4c3-e5881520477f"
     },
     {
         "consent_codes": [],
@@ -109,7 +109,7 @@
         "md5sum": "e2af168adc2dd7598f1444f262684a20",
         "submitter_id": "submitted_copy_number_0e1d0ca14c",
         "type": "submitted_copy_number",
-        "object_id": "1552a006-1ec4-4d34-9557-4b4740cf4251"
+        "object_id": "FOOBAR:68971f19-3f94-4fe8-920a-b5a6f10c561d"
     },
     {
         "consent_codes": [],
@@ -125,7 +125,7 @@
         "md5sum": "a552120e345ca1ef162746f95e11618e",
         "submitter_id": "submitted_copy_number_b6e038cfff",
         "type": "submitted_copy_number",
-        "object_id": "b4554fec-253e-42ac-b1a4-001a930b0b53"
+        "object_id": "FOOBAR:375f5b8d-1d9d-4761-b2ec-5ce9634c164b"
     },
     {
         "consent_codes": [],
@@ -141,7 +141,7 @@
         "md5sum": "fbc44b050fb139fe1523ebf76673ffc3",
         "submitter_id": "submitted_copy_number_41899d190a",
         "type": "submitted_copy_number",
-        "object_id": "00e71d85-4643-4322-b693-a377edae4fc0"
+        "object_id": "FOOBAR:d00dc235-ba61-44f9-b56d-83f443c25fde"
     },
     {
         "consent_codes": [],
@@ -157,6 +157,6 @@
         "md5sum": "50365bcee3103a5531a55c66d829b849",
         "submitter_id": "submitted_copy_number_f835488fa4",
         "type": "submitted_copy_number",
-        "object_id": "72b53c51-1bd1-482c-b366-7b9cc2fbe73a"
+        "object_id": "FOOBAR:f7804692-3503-4d2c-a599-ae9d19b027a7"
     }
 ]

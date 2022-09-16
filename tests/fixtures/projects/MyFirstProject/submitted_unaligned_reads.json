@@ -13,7 +13,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_40a83db5ed",
         "type": "submitted_unaligned_reads",
-        "object_id": "a24768bc-325b-4208-9a7c-cfcfd7a09b65"
+        "object_id": "FOOBAR:f2340357-c1e7-4f81-ad55-442b4756a678"
     },
     {
         "consent_codes": [],
@@ -29,7 +29,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_ffe6241984",
         "type": "submitted_unaligned_reads",
-        "object_id": "51df49e9-cc9f-4f0c-8609-9cc1a57c7da0"
+        "object_id": "FOOBAR:6a6c0544-1a3c-4e9a-8009-9729aa806c15"
     },
     {
         "consent_codes": [],
@@ -45,7 +45,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_974543499c",
         "type": "submitted_unaligned_reads",
-        "object_id": "60d01d8c-daf2-40ac-8379-db328f30cf19"
+        "object_id": "FOOBAR:f24aa51c-a24c-4fc3-a4fa-066677ac1774"
     },
     {
         "consent_codes": [],
@@ -61,7 +61,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_679c62ebc5",
         "type": "submitted_unaligned_reads",
-        "object_id": "eda92506-e32f-4cb7-be9c-9af0500c7e56"
+        "object_id": "FOOBAR:a3f882f8-45f8-4622-82bf-4a10873c0b79"
     },
     {
         "consent_codes": [],
@@ -77,7 +77,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_8302bf514e",
         "type": "submitted_unaligned_reads",
-        "object_id": "cca459fc-ac57-4cbd-932f-77f55d010225"
+        "object_id": "FOOBAR:3e6ac1f7-e601-47bb-91c7-e4969c7dc65b"
     },
     {
         "consent_codes": [],
@@ -93,7 +93,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_406f9bbed3",
         "type": "submitted_unaligned_reads",
-        "object_id": "1d3da98c-51e1-4359-a5e7-91da34482db4"
+        "object_id": "FOOBAR:4385cf9f-aef7-46d9-8511-4788cba36ae6"
     },
     {
         "consent_codes": [],
@@ -109,7 +109,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_06bd6d8849",
         "type": "submitted_unaligned_reads",
-        "object_id": "25b9418e-14cd-4b4b-a531-fd264ad585ff"
+        "object_id": "FOOBAR:26335a38-9054-4022-8ab2-e0ef6cb8fe51"
     },
     {
         "consent_codes": [],
@@ -125,7 +125,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_d44a55bf88",
         "type": "submitted_unaligned_reads",
-        "object_id": "0a332616-3dd0-4f03-aa13-d0ec22100a7e"
+        "object_id": "FOOBAR:74bc0ecb-02f5-4777-aba5-c426014cf67e"
     },
     {
         "consent_codes": [],
@@ -141,7 +141,7 @@
         },
         "submitter_id": "submitted_unaligned_reads_9063462325",
         "type": "submitted_unaligned_reads",
-        "object_id": "9c37b711-9ed0-4233-ac3a-17b6e5abb547"
+        "object_id": "FOOBAR:02ecd79b-3da1-4d64-b154-5576b7434de7"
     },
     {
         "consent_codes": [],
@@ -157,6 +157,6 @@
         },
         "submitter_id": "submitted_unaligned_reads_593e312dde",
         "type": "submitted_unaligned_reads",
-        "object_id": "7ce86f7a-87da-4666-96c1-c3ee5f214054"
+        "object_id": "FOOBAR:71945a07-c3ec-4bad-9437-de3cc32a6ba7"
     }
 ]

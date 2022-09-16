@@ -15,7 +15,7 @@
         "md5sum": "0ee5af0be59902b9b67ee8ceb466a44d",
         "submitter_id": "submitted_methylation_c587baac83",
         "type": "submitted_methylation",
-        "object_id": "6de2e763-7bcb-4428-a6ee-f30427e7642c"
+        "object_id": "FOOBAR:94fc8b0d-42c6-4b1e-90c8-ebe50cdf543d"
     },
     {
         "assay_instrument": "Illumina",
@@ -33,7 +33,7 @@
         "md5sum": "d59ac9db2b61fc06cc9ffb9c2951c59b",
         "submitter_id": "submitted_methylation_6ac48f47a7",
         "type": "submitted_methylation",
-        "object_id": "77dd5f50-c131-431e-ba2f-71d06a1846eb"
+        "object_id": "FOOBAR:fe62371d-742f-43e8-ae07-86d680bb00c7"
     },
     {
         "assay_instrument": "Illumina",
@@ -51,7 +51,7 @@
         "md5sum": "0e0dbf5d09232d706afb5542e2d4b27b",
         "submitter_id": "submitted_methylation_e5cd40ca4d",
         "type": "submitted_methylation",
-        "object_id": "eab94d7a-3dbf-4c99-8a80-262c23c0e914"
+        "object_id": "FOOBAR:38be1b76-5318-4b92-85a0-e92a0502d53a"
     },
     {
         "assay_instrument": null,
@@ -69,7 +69,7 @@
         "md5sum": "545f11cd83d2dc97ea41c8af7779303e",
         "submitter_id": "submitted_methylation_73d94e4e88",
         "type": "submitted_methylation",
-        "object_id": "355025aa-7988-4e0b-9612-f96ae5c20c1b"
+        "object_id": "FOOBAR:ecd631f5-6085-45c6-9c52-1ee85b1ea079"
     },
     {
         "assay_instrument": null,
@@ -87,7 +87,7 @@
         "md5sum": "b2456fc05fe6902f882d4e12a05f99d9",
         "submitter_id": "submitted_methylation_6b289e85b6",
         "type": "submitted_methylation",
-        "object_id": "aadf636a-ae48-4b61-9143-eac08592a91e"
+        "object_id": "FOOBAR:4c5e5333-8a63-4b13-8ef5-c71b2256140b"
     },
     {
         "assay_instrument": "Illumina",
@@ -105,7 +105,7 @@
         "md5sum": "c3344830c9177ccf99e645d8a5209d63",
         "submitter_id": "submitted_methylation_3b9fe14bd6",
         "type": "submitted_methylation",
-        "object_id": "b18d7f4a-107a-4a86-854e-e3246a3d5735"
+        "object_id": "FOOBAR:b0c38862-cf29-4435-815f-51b4c2f9fdb3"
     },
     {
         "assay_instrument": "Illumina",
@@ -123,7 +123,7 @@
         "md5sum": "795d9cab40759503003c7e2e9a255d7c",
         "submitter_id": "submitted_methylation_e1f07a1ad7",
         "type": "submitted_methylation",
-        "object_id": "d393ec75-7bd8-48f7-8948-1317514a7885"
+        "object_id": "FOOBAR:9ac196e9-2f24-41c4-b624-46e8d4393edd"
     },
     {
         "assay_instrument": "Illumina",
@@ -141,7 +141,7 @@
         "md5sum": "8cad8b7b27f95ddd660912236b09dd32",
         "submitter_id": "submitted_methylation_f27e72a544",
         "type": "submitted_methylation",
-        "object_id": "58a07d4b-57fe-41fd-8bcb-9ea01afcd607"
+        "object_id": "FOOBAR:ca697e29-6cfb-47b6-a30e-c34bf6594a74"
     },
     {
         "assay_instrument": "Illumina",
@@ -159,7 +159,7 @@
         "md5sum": "80ff4af5800cbea00979613e06c3de1b",
         "submitter_id": "submitted_methylation_2ca5289441",
         "type": "submitted_methylation",
-        "object_id": "be448433-58a5-4bb5-9aa3-f2274556e9fe"
+        "object_id": "FOOBAR:4dd5c4a6-dd0d-468c-a7ec-2a331f1eeffd"
     },
     {
         "assay_instrument": null,
@@ -177,6 +177,6 @@
         "md5sum": "a1c7c79dfec9468f034dc48ac919a05c",
         "submitter_id": "submitted_methylation_7dc567f1bc",
         "type": "submitted_methylation",
-        "object_id": "f791a071-a388-459d-b84a-62df41c2892a"
+        "object_id": "FOOBAR:f19734bb-c652-48c4-8db9-515e62a45efa"
     }
 ]
