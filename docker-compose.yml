@@ -41,7 +41,8 @@ services:
     depends_on:
       - postgres
   fence-service:
-    image: "quay.io/cdis/fence:2021.03"
+    #image: "quay.io/cdis/fence:2021.03"
+    build: fence
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -268,7 +269,7 @@ services:
     networks:
       - devnet
     environment:
-      - FRAME_ANCESTORS=http://localhost
+      - FRAME_ANCESTORS=http://aced-training.compbio.ohsu.edu
   revproxy-service:
     image: "quay.io/cdis/nginx:2021.03"
     container_name: revproxy-service
