@@ -367,6 +367,10 @@ def discovery(ctx, program, project, data_directory):
             gen3_discovery['commons'] = "ACED"
             gen3_discovery['commons_name'] = "ACED Commons"
             gen3_discovery['commons_url'] = 'https://aced-training.compbio.ohsu.edu/'
+            gen3_discovery['__manifest'] = 0
+            gen3_discovery['_subjects_count'] = 10  # TODO
+            gen3_discovery['_unique_id'] = guid
+            gen3_discovery['study_id'] = guid
             discoverable_data = dict(_guid_type="discovery_metadata", gen3_discovery=gen3_discovery)
             discovery_client.create(guid, discoverable_data, aliases=None, overwrite=True)
             get_logger_("discovery").info(f"Added {project}")
