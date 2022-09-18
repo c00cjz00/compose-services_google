@@ -421,3 +421,49 @@ TODO (remainder of doc is work in progress)
 * Update gitops.json
 
     See example/Secrets
+
+## enable jupyter notebooks
+
+* All we need to do is specify trusted domain for the jupyter notebook in docker-compose.yml
+
+```commandline
+
+     environment:
+-      - FRAME_ANCESTORS=http://localhost
++      - FRAME_ANCESTORS=http://aced-training.compbio.ohsu.edu
+   revproxy-service:
+```
+
+
+## Customize Fence
+
+```commandline
+# PRs to allow user to upload file to any of the buckets  fence manages.
+https://github.com/uc-cdis/gen3sdk-python/pull/158
+https://github.com/uc-cdis/fence/pull/1048
+
+```
+
+
+> These steps assume the PRs have _not_ been merged to main.
+
+* Clone fence in the compose-services dir. checkout the `alternate-data_upload_bucket` branch  
+* Alter docker-compose.
+
+```commandline
+
+-    image: "quay.io/cdis/fence:2021.03"
++    #image: "quay.io/cdis/fence:2021.03"
++    build: fence
+```
+
+* update etl/requirements.txt to point to client side PR
+
+```commandline
+
+# etl/requirements.txt
+-gen3
++#  gen3
++https://github.com/ohsu-comp-bio/gen3sdk-python/archive/feat/alternate-data_upload_bucket.zip
+
+```
