@@ -132,7 +132,7 @@ def upload(ctx, bucket_name, project_path, program, project):
             synthetic_file_path = f"{record['file_name']}"
 
             # create a record in gen3, get a signed url
-            document = file_client.upload_file(object_name)
+            document = file_client.upload_file(object_name, bucket=bucket_name)
             assert 'guid' in document, document
             assert 'url' in document, document
             signed_url = urllib.parse.unquote(document['url'])
