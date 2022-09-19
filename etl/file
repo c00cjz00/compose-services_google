@@ -16,6 +16,8 @@ from gen3.index import Gen3Index
 from gen3.submission import Gen3Submission
 
 from cdislogging import get_logger as get_gen3_logger
+import base64
+import hashlib
 
 log_fmt = "%(asctime)s %(name)s %(levelname)s : %(message)s"
 
@@ -129,7 +131,6 @@ def upload(ctx, bucket_name, project_path, program, project):
                 break
 
             object_name = record['file_name'].lstrip('/')
-            synthetic_file_path = f"{record['file_name']}"
 
             # create a record in gen3, get a signed url
             document = file_client.upload_file(object_name, bucket=bucket_name)
@@ -148,7 +149,11 @@ def upload(ctx, bucket_name, project_path, program, project):
 
             # open the file and upload it to the signed url returned above
             with open(record['file_name'], 'rb') as data:
-                headers = {}
+                # When you use this header, Amazon S3 checks the object against the provided MD5 value and,
+                # if they do not match, returns an error.
+                content_md5 = base64.b64encode(bytes.fromhex(record['md5sum']))
+                headers = {'Content-MD5': content_md5}
+                # Our meta data
                 for key, value in metadata.items():
                     headers[f"x-amz-meta-{key}"] = value
                 r = requests.put(signed_url, data=data, headers=headers)
