@@ -11,11 +11,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/7693efc928",
-        "file_size": 10632,
-        "md5sum": "0ee5af0be59902b9b67ee8ceb466a44d",
+        "file_size": 14606,
+        "md5sum": "851819bcd23699e564addbb1ed584267",
         "submitter_id": "submitted_methylation_c587baac83",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:94fc8b0d-42c6-4b1e-90c8-ebe50cdf543d"
+        "object_id": "FOOBAR:35dd0532-dbf1-4f88-9329-9dcf78f38f15"
     },
     {
         "assay_instrument": "Illumina",
@@ -29,11 +29,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/4603d7de94",
-        "file_size": 11051,
-        "md5sum": "d59ac9db2b61fc06cc9ffb9c2951c59b",
+        "file_size": 4826,
+        "md5sum": "e7e5df0a47a719052ba406d23681b081",
         "submitter_id": "submitted_methylation_6ac48f47a7",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:fe62371d-742f-43e8-ae07-86d680bb00c7"
+        "object_id": "FOOBAR:7120601c-ad01-4985-9cd3-6c8ef9a36bb2"
     },
     {
         "assay_instrument": "Illumina",
@@ -47,11 +47,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/fac722cf23",
-        "file_size": 11456,
-        "md5sum": "0e0dbf5d09232d706afb5542e2d4b27b",
+        "file_size": 14140,
+        "md5sum": "27d13046a990121699add866e7574734",
         "submitter_id": "submitted_methylation_e5cd40ca4d",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:38be1b76-5318-4b92-85a0-e92a0502d53a"
+        "object_id": "FOOBAR:61f663fd-4448-47f4-9849-506de504a263"
     },
     {
         "assay_instrument": null,
@@ -65,11 +65,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/7b86b92147",
-        "file_size": 5073,
-        "md5sum": "545f11cd83d2dc97ea41c8af7779303e",
+        "file_size": 4247,
+        "md5sum": "02017d309a24324fa74d0de2a9926bd6",
         "submitter_id": "submitted_methylation_73d94e4e88",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:ecd631f5-6085-45c6-9c52-1ee85b1ea079"
+        "object_id": "FOOBAR:12b99a28-a1fb-4533-82a9-35aa3c481cfd"
     },
     {
         "assay_instrument": null,
@@ -83,11 +83,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/0a3a8e4fac",
-        "file_size": 7697,
-        "md5sum": "b2456fc05fe6902f882d4e12a05f99d9",
+        "file_size": 12572,
+        "md5sum": "3b5fb12ad84fae6f42de2851499a969d",
         "submitter_id": "submitted_methylation_6b289e85b6",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:4c5e5333-8a63-4b13-8ef5-c71b2256140b"
+        "object_id": "FOOBAR:c4c0ea17-0e6f-4ce1-a631-867c36eedad8"
     },
     {
         "assay_instrument": "Illumina",
@@ -101,11 +101,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/aa789d9c44",
-        "file_size": 14174,
-        "md5sum": "c3344830c9177ccf99e645d8a5209d63",
+        "file_size": 14321,
+        "md5sum": "6c734acbe99cf7de7b9cea0be33533a8",
         "submitter_id": "submitted_methylation_3b9fe14bd6",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:b0c38862-cf29-4435-815f-51b4c2f9fdb3"
+        "object_id": "FOOBAR:c747f620-d216-46e7-8a0f-6d0028303819"
     },
     {
         "assay_instrument": "Illumina",
@@ -119,11 +119,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/1143250872",
-        "file_size": 9448,
-        "md5sum": "795d9cab40759503003c7e2e9a255d7c",
+        "file_size": 11558,
+        "md5sum": "b879b753c1d5b9f51dab6ccb0e44c675",
         "submitter_id": "submitted_methylation_e1f07a1ad7",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:9ac196e9-2f24-41c4-b624-46e8d4393edd"
+        "object_id": "FOOBAR:da68f8e8-4e6f-4999-9545-1ab80595294b"
     },
     {
         "assay_instrument": "Illumina",
@@ -137,11 +137,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/06ed90d8dd",
-        "file_size": 7696,
-        "md5sum": "8cad8b7b27f95ddd660912236b09dd32",
+        "file_size": 3282,
+        "md5sum": "2836511b7990e9af5deaf73c4cadb942",
         "submitter_id": "submitted_methylation_f27e72a544",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:ca697e29-6cfb-47b6-a30e-c34bf6594a74"
+        "object_id": "FOOBAR:5e3634f2-b871-43da-9b3e-6421fade5f54"
     },
     {
         "assay_instrument": "Illumina",
@@ -155,11 +155,11 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/6351c57217",
-        "file_size": 9162,
-        "md5sum": "80ff4af5800cbea00979613e06c3de1b",
+        "file_size": 14445,
+        "md5sum": "3e1dcc5ed86ddd2df6e3fc41047f4540",
         "submitter_id": "submitted_methylation_2ca5289441",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:4dd5c4a6-dd0d-468c-a7ec-2a331f1eeffd"
+        "object_id": "FOOBAR:acdb03af-872d-49f9-8b74-c2d613bed943"
     },
     {
         "assay_instrument": null,
@@ -173,10 +173,10 @@
         "data_format": "IDAT",
         "data_type": "Methylation Intensity Values",
         "file_name": "tests/fixtures/projects/MyFirstProject/DATA/a7f382997b",
-        "file_size": 15974,
-        "md5sum": "a1c7c79dfec9468f034dc48ac919a05c",
+        "file_size": 10294,
+        "md5sum": "9ba5d6d8b19475382aa942acf2976713",
         "submitter_id": "submitted_methylation_7dc567f1bc",
         "type": "submitted_methylation",
-        "object_id": "FOOBAR:f19734bb-c652-48c4-8db9-515e62a45efa"
+        "object_id": "FOOBAR:b38a63ad-ed72-4177-a4d6-cb0807f0b362"
     }
 ]
