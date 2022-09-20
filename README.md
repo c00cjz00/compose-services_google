@@ -3,7 +3,7 @@ ACED - Training
 ===
 > This repo was established as a sandbox to introduce Gen3 in a local, docker-compose laptop friendly environment.
 
-Follow the instructions below to introduce Gen3.  Then, see ACED specific steps [here](aced.md) 
+Follow the instructions below to introduce Gen3.  Then, see ACED specific steps [here](docs/aced.md) 
 
 
 

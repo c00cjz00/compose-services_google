@@ -4,7 +4,6 @@
 > 
 > Now that you've completed this task, let's explore some ACED specific customizations.
 
-
 ## Fence
 
  > Fence is the main authentication mechanism for Gen3.   Let's add some ACED specifics ...
@@ -19,17 +18,15 @@
 
 ```
 # testing
-127.0.0.1  aced-training.compbio.ohsu.edu
+127.0.0.1 aced-training.compbio.ohsu.edu
 127.0.0.1 minio.compbio.ohsu.edu
 127.0.0.1 minio-console.compbio.ohsu.edu
-
-
 ```
 
   ## windmill's auth display
   
   add to Secrets/gitops.json
-  ```
+  ```json
   "showArboristAuthzOnProfile": true,
   "showFenceAuthzOnProfile": false
   ```
@@ -38,8 +35,6 @@
 
    ![image](profile.png)
   
-    
-
   ## migrations
 
   > The fence service will automatically apply a database migration on startup.   We don't want to do that every time, let's turn that off
@@ -54,23 +49,21 @@
   fence-service  | [2022-09-06 21:27:31,812][     fence][   INFO] NOT running database migration.
   ```
 
-
   ## Authentication
 
   > For testing, we won't configure OAuth, we will use a default user "test"
 
 * Let's turn off auth: Secrets/fence-config.yaml#L48-L49
 
-   ```
+   ```yaml
    # if true, will automatically login a user with username "test"
    MOCK_AUTH: true
    ```
 
    * Then adjust the user mapping to make the "test" user admin. In Secrets/user.yaml, change all occurrences of `username1@gmail.com` to `test`
 
-
    * Then restart fence.
-     ```
+     ```sh
      docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up -d fence-service ;
      ```
 
@@ -111,7 +104,7 @@
 
   * Now, let's generate corresponding data files
 
-    ```commandline
+    ```sh
     ./etl/file --gen3_credentials_file <your-credential-file>  upload --project_path tests/fixtures/projects/MyFirstProject/
     ```
 
@@ -139,7 +132,7 @@ For example, view the `metadata` script, where `credentials.json` is the key fil
 
 List the schema entities: 
 
-```commandline
+```sh
 
 ./etl/metadata --gen3_credentials_file credentials.json ls  | jq .
 
@@ -198,7 +191,7 @@ List the schema entities:
 
 * Add the kibana path to `nginx.conf`
 
-```commandline
+```diff
 +++ b/nginx.conf
 @@ -276,5 +276,17 @@ http {
          location /lw-workspace/ {
@@ -221,7 +214,7 @@ List the schema entities:
 ```   
 * add the path to docker-compose
 
-```commandline
+```diff
    kibana-service:
      image: quay.io/cdis/kibana-oss:6.5.4
      container_name: kibana-service
@@ -240,7 +233,7 @@ List the schema entities:
 
 * Update the docker compose to disable the spark and tube service
 
-```commandline
+```diff
 @@ -283,42 +287,42 @@ services:
        - fence-service
        - portal-service
@@ -257,13 +250,13 @@ List the schema entities:
 
 * Run the `tube-lite` replacement of spark and tube
 
-```commandline
+```sh
 ./etl/tube_lite --credentials_path credentials-local.json  --elastic http://localhost:9200
 ```
 
 * Alter `guppy-setup.sh` to run the tube_lite
 
-```commandline
+```diff
 diff --git a/guppy_setup.sh b/guppy_setup.sh
 index 559668d..5081eb1 100644
 --- a/guppy_setup.sh
@@ -306,7 +299,7 @@ index 559668d..5081eb1 100644
 
 * For local host testing.
 
-```commandline
+```sh
 127.0.0.1 minio-default.compbio.ohsu.edu
 127.0.0.1 minio-default-console.compbio.ohsu.edu
 127.0.0.1 minio-ohsu.compbio.ohsu.edu
@@ -322,7 +315,7 @@ index 559668d..5081eb1 100644
 
 
 * Add the minio.conf file to the revproxy-service
-```commandline
+```diff
 $ git diff docker-compose.yml
 diff --git a/docker-compose.yml b/docker-compose.yml
 index 62c536d..0a0f03f 100644
@@ -373,7 +366,7 @@ index 62c536d..0a0f03f 100644
 
 * Now, let's empty the project, then re-create the project end to end.
 
-  ```commandline
+  ```sh
   # empty the project
   ./etl/metadata --gen3_credentials_file <your-credential-file> empty --program MyFirstProgram --project MyFirstProject
   # upload the data files
@@ -397,7 +390,7 @@ TODO (remainder of doc is work in progress)
 
 * Update the metadata service image
 
-```
+```diff
    metadata-service:
 -    image: "quay.io/cdis/metadata-service:2021.03"
 +    image: "quay.io/cdis/metadata-service:1.8.0"
@@ -426,7 +419,7 @@ TODO (remainder of doc is work in progress)
 
 * All we need to do is specify trusted domain for the jupyter notebook in docker-compose.yml
 
-```commandline
+```diff
 
      environment:
 -      - FRAME_ANCESTORS=http://localhost
@@ -437,7 +430,7 @@ TODO (remainder of doc is work in progress)
 
 ## Customize Fence
 
-```commandline
+```sh
 # PRs to allow user to upload file to any of the buckets  fence manages.
 https://github.com/uc-cdis/gen3sdk-python/pull/158
 https://github.com/uc-cdis/fence/pull/1048
@@ -450,7 +443,7 @@ https://github.com/uc-cdis/fence/pull/1048
 * Clone fence in the compose-services dir. checkout the `alternate-data_upload_bucket` branch  
 * Alter docker-compose.
 
-```commandline
+```diff
 
 -    image: "quay.io/cdis/fence:2021.03"
 +    #image: "quay.io/cdis/fence:2021.03"
@@ -459,7 +452,7 @@ https://github.com/uc-cdis/fence/pull/1048
 
 * update etl/requirements.txt to point to client side PR
 
-```commandline
+```diff
 
 # etl/requirements.txt
 -gen3
