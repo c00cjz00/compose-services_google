@@ -112,16 +112,24 @@
 
     ./etl/file --gen3_credentials_file Secrets/credentials.json upload --project_path tests/fixtures/projects/MyFirstProject/
     ```
+### Manual TSV Upload
 
   * Load the data manually by following the [instructions](https://gen3.org/resources/user/submit-data/#begin-metadata-tsv-submissions)
     (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
 
-    ![image](graph-view.png)
+  ![image](graph-view.png)
 
-    * When complete, the graph should look like this.
+  * When complete, the graph should look like this.
       
-    ![image](graph-view-complete.png)
+  ![image](graph-view-complete.png)
 
+### `metadata` Command Upload
+
+  * Alternatively, to upload the metadata with the `metadata` command enter the following:
+
+  ```sh
+  ./etl/metadata --gen3_credentials_file <your-credential-file>  load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
+  ```
 
 ## API
 
