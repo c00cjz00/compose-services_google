@@ -14,7 +14,7 @@
 
   You should have already seen this in the compose services docs for `bash ./creds_setup.sh aced-training.compbio.ohsu.edu`
 
-  To test locally, update your /etc/hosts file.
+  To test locally, update your `/etc/hosts` file.
 
 ```
 # testing
@@ -66,7 +66,6 @@
      ```sh
      docker-compose stop fence-service ; docker-compose rm  -f fence-service ; docker-compose up -d fence-service ;
      ```
-
   
 ## certs
 
@@ -78,13 +77,10 @@
 
   * Once you have access, to install the certificate in gen3 follow these steps, assuming certs directory in ~/compbio-tls
 
-  ```
-
+  ```sh
   cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.interim-bundle.pem  ./Secrets/TLS/service.crt
   cp /home/ubuntu/compbio-tls/compbio-tls/compbio.ohsu.edu-2022.key ./Secrets/TLS/service.key   
-
   ```
-
 
 ## Data
 
@@ -92,10 +88,17 @@
 
   * Create a program (MyFirstProgram) and project (MyFirstProject).  See https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#programs-and-projects
 
+  * Activate the virtual environment and install required packages.
+
+        ```sh
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install -r etl/requirements.txt
+        ```
 
   * Let's generate some synthetic meta data
 
-       ```
+       ```sh
        export TEST_DATA_PATH="$(pwd)/tests/fixtures/projects/MyFirstProject"
        mkdir -p "$TEST_DATA_PATH"
     
@@ -105,18 +108,19 @@
   * Now, let's generate corresponding data files
 
     ```sh
-    ./etl/file --gen3_credentials_file <your-credential-file>  upload --project_path tests/fixtures/projects/MyFirstProject/
+    ./etl/generate_simulated_files --project_path tests/fixtures/projects/MyFirstProject --output_path tests/fixtures/projects/MyFirstProject/DATA
+
+    ./etl/file --gen3_credentials_file Secrets/credentials.json upload --project_path tests/fixtures/projects/MyFirstProject/
     ```
 
-
   * Load the data manually by following the [instructions](https://gen3.org/resources/user/submit-data/#begin-metadata-tsv-submissions)
-        (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
+    (Note that the data we will be using is in JSON form.) This will be a good opportunity to discover data dependency order. Navigate to the "Submit Data" page. Load the data, following the hierarchy displayed in the "Toogle View"
 
     ![image](graph-view.png)
 
     * When complete, the graph should look like this.
       
-      ![image](graph-view-complete.png)
+    ![image](graph-view-complete.png)
 
 
 ## API
@@ -125,16 +129,12 @@ This may be a good time to examine the Gen3 API.  You will need an API key first
 
 ![image](profile-create-key.png)
 
-
-
-
 For example, view the `metadata` script, where `credentials.json` is the key file downloaded above.
 
 List the schema entities: 
 
 ```sh
-
-./etl/metadata --gen3_credentials_file credentials.json ls  | jq .
+./etl/metadata --gen3_credentials_file Secrets/credentials.json ls  | jq .
 
     {
       "programs": {
@@ -177,8 +177,6 @@ List the schema entities:
 
 ```
 
-
-
 ## Re-Enable guppy
 
   * (Re)Read the [documentation](https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#configuring-guppy-for-exploration-page)  
@@ -186,7 +184,6 @@ List the schema entities:
   * Rollback comment out of kibana in docker-compose.yml
   * Run `bash guppy_setup.sh`  - this should run the spark, tube service and launch the guppy service.  
       
-
 ## Expose the kibana service
 
 * Add the kibana path to `nginx.conf`
@@ -212,6 +209,7 @@ List the schema entities:
      }
  }
 ```   
+
 * add the path to docker-compose
 
 ```diff
@@ -227,7 +225,6 @@ List the schema entities:
      networks:
 
 ```
-
 
 ## Refactor the spark and tube services
 
@@ -251,7 +248,7 @@ List the schema entities:
 * Run the `tube-lite` replacement of spark and tube
 
 ```sh
-./etl/tube_lite --credentials_path credentials-local.json  --elastic http://localhost:9200
+./etl/tube_lite --credentials_path Secrets/credentials.json  --elastic http://localhost:9200
 ```
 
 * Alter `guppy-setup.sh` to run the tube_lite
@@ -285,21 +282,19 @@ index 559668d..5081eb1 100644
 
 ```
 
-* Examine the results using kibana
+* Examine the results using [kibana](http://localhost:5601/app/kibana#/dev_tools/console?_g=())
 
 ![image](kibana.png)
 
-* Examine the results in the portal
+* Examine the results in the [portal](http://localhost/files)
 
 ![image](portal-tube-results.png)
 
-
 ## Local Object Store (minio)
 
+* Add the following to `/etc/hosts` for local host testing.
 
-* For local host testing.
-
-```sh
+```
 127.0.0.1 minio-default.compbio.ohsu.edu
 127.0.0.1 minio-default-console.compbio.ohsu.edu
 127.0.0.1 minio-ohsu.compbio.ohsu.edu
@@ -312,9 +307,8 @@ index 559668d..5081eb1 100644
 127.0.0.1 minio-stanford-console.compbio.ohsu.edu
 ```
 
-
-
 * Add the minio.conf file to the revproxy-service
+
 ```diff
 $ git diff docker-compose.yml
 diff --git a/docker-compose.yml b/docker-compose.yml
@@ -339,7 +333,7 @@ index 62c536d..0a0f03f 100644
 
 * Examine logs
 
-    ```
+    ```sh
     $ dc logs  minio-default
         minio1-service  | Formatting 1st pool, 1 set(s), 2 drives per set.
         minio1-service  | WARNING: Host minio1-service:9000 has more than 1 drives of set. A host failure will result in data becoming unavailable.
@@ -357,7 +351,7 @@ index 62c536d..0a0f03f 100644
 
 * Verify connection
 
-  * curl http://minio-default.compbio.ohsu.edu/minio/health/live
+  * `curl http://minio-default.compbio.ohsu.edu/minio/health/live`
   * open http://minio-default-console.compbio.ohsu.edu
   * repeat for other minio-* servers
 
@@ -376,15 +370,8 @@ index 62c536d..0a0f03f 100644
   # re-create the elastic search indices
   bash ./guppy_setup.sh  <your-credential-file>  
   ```
-
-
-
-
-
 TODO (remainder of doc is work in progress)
 =====
-
-
 
 ## Let's setup discovery
 
@@ -410,33 +397,26 @@ TODO (remainder of doc is work in progress)
      command: >
 ```
 
-
 * Update gitops.json
 
     See example/Secrets
 
-## enable jupyter notebooks
+## Enable jupyter notebooks
 
 * All we need to do is specify trusted domain for the jupyter notebook in docker-compose.yml
 
 ```diff
-
      environment:
 -      - FRAME_ANCESTORS=http://localhost
 +      - FRAME_ANCESTORS=http://aced-training.compbio.ohsu.edu
    revproxy-service:
 ```
 
-
 ## Customize Fence
 
-```sh
-# PRs to allow user to upload file to any of the buckets  fence manages.
+PRs to allow user to upload file to any of the buckets fence manages.
 https://github.com/uc-cdis/gen3sdk-python/pull/158
 https://github.com/uc-cdis/fence/pull/1048
-
-```
-
 
 > These steps assume the PRs have _not_ been merged to main.
 
@@ -444,7 +424,6 @@ https://github.com/uc-cdis/fence/pull/1048
 * Alter docker-compose.
 
 ```diff
-
 -    image: "quay.io/cdis/fence:2021.03"
 +    #image: "quay.io/cdis/fence:2021.03"
 +    build: fence
@@ -453,10 +432,8 @@ https://github.com/uc-cdis/fence/pull/1048
 * update etl/requirements.txt to point to client side PR
 
 ```diff
-
 # etl/requirements.txt
 -gen3
 +#  gen3
 +https://github.com/ohsu-comp-bio/gen3sdk-python/archive/feat/alternate-data_upload_bucket.zip
-
 ```
