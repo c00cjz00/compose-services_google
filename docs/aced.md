@@ -90,11 +90,11 @@
 
   * Activate the virtual environment and install required packages.
 
-        ```sh
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r etl/requirements.txt
-        ```
+    ```sh
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r etl/requirements.txt
+    ```
 
   * Let's generate some synthetic meta data
 
@@ -128,7 +128,7 @@
   * Alternatively, to upload the metadata with the `metadata` command enter the following:
 
   ```sh
-  ./etl/metadata --gen3_credentials_file <your-credential-file>  load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
+  ./etl/metadata --gen3_credentials_file Secrets/credentials.json load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
   ```
 
 ## API
@@ -370,13 +370,13 @@ index 62c536d..0a0f03f 100644
 
   ```sh
   # empty the project
-  ./etl/metadata --gen3_credentials_file <your-credential-file> empty --program MyFirstProgram --project MyFirstProject
+  ./etl/metadata --gen3_credentials_file Secrets/credentials.json empty --program MyFirstProgram --project MyFirstProject
   # upload the data files
-  ./etl/file --gen3_credentials_file <your-credential-file>  upload --project_path tests/fixtures/projects/MyFirstProject/
+  ./etl/file --gen3_credentials_file Secrets/credentials.json upload --project_path tests/fixtures/projects/MyFirstProject/
   # upload the meta data
-  ./etl/metadata --gen3_credentials_file <your-credential-file>  load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
+  ./etl/metadata --gen3_credentials_file Secrets/credentials.json  load --project MyFirstProject --program MyFirstProgram --data_directory tests/fixtures/projects/MyFirstProject/
   # re-create the elastic search indices
-  bash ./guppy_setup.sh  <your-credential-file>  
+  bash ./guppy_setup.sh Secrets/credentials.json
   ```
 TODO (remainder of doc is work in progress)
 =====
@@ -445,3 +445,13 @@ https://github.com/uc-cdis/fence/pull/1048
 +#  gen3
 +https://github.com/ohsu-comp-bio/gen3sdk-python/archive/feat/alternate-data_upload_bucket.zip
 ```
+
+# Microservices
+
+Adapted from https://gen3.org/resources/developer/microservice/
+
+- Sheepdog: Handles the submitting and downloading of metadata to and from the GraphQL database.
+- Peregrine: Sends GraphQL queries to the PostgreSQL backend and returns results in JSON format.
+- Fence: Authenticates (AuthN) and authorizes (AuthZ) users. Generates tokens in `credentials.json`.
+- Indexd: Creates permanent ID's (GUID) for every newly submitted data object.
+- Windmill: Frontend for the exploration, submission, and downloading of data.
