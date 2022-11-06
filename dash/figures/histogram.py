@@ -65,7 +65,7 @@ def histogram_selects(histograms):
                     'label': html.Div(
                          [
                              html.Div(h.key),
-                             dbc.Badge(h.count, className="ms-1", color="info",
+                             dbc.Badge(h.count, className="ms-1 term-count", color="info",
                                        id={
                                            'index': f"{entity}-{k}-{h.key}",
                                            'type': 'term-count'

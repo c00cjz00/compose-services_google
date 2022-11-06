@@ -2,7 +2,7 @@ import logging
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, Output, Input, ALL, callback, MATCH, State
+from dash import dcc, html, Output, Input, ALL, callback, MATCH, State, get_app
 from figures.histogram import histogram_selects, histogram_sliders
 from inflection import titleize, pluralize
 from models.file import get_file_histograms
@@ -48,19 +48,78 @@ def display_filters(values, ids):
 
 
 @callback(
-    Output({'type': 'term-count', 'index': MATCH}, 'children'),
-    Input({'type': 'query-parameter', 'index': MATCH}, 'value'),
-    State({'type': 'query-parameter', 'index': MATCH}, 'id')
+    Output('histogram-data', 'data'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'value'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'id')
 )
 def update_counters(values, ids):
     """Run a histogram and then update badges."""
     logger.error(('update_counters', values, ids))
-    return ''
-    # filters = build_filters(values, ids)
+    filters = build_filters(values, ids)
+    histograms = {'_aggregation': {}}
+    histogram_fetchers = {
+        'file': get_file_histograms,
+        'case': get_observation_histograms
+    }
+    for entity_name in filters:
+        fetcher = histogram_fetchers.get(entity_name, None)
+        if fetcher:
+            fetcher_results = fetcher(variables=filters[entity_name])
+            for aggregation_name in fetcher_results['_aggregation']:
+                histograms['_aggregation'][aggregation_name] = fetcher_results['_aggregation'][aggregation_name]
+    return histograms
+    #
     # if 'file' in filters:
     #     file_histograms = get_file_histograms(variables=filters['file'])
-    #     logger.error(file_histograms)
-    # return json.dumps(filters, indent=4)
+    #     return file_histograms
+    # else:
+    #     return {}
+
+
+# Clientside callback: traverse histogram, match DOM with class name 'term-count' update counts in DOM directly
+get_app().clientside_callback(
+    """
+    // traverse histogram, match DOM with class name 'term-count' update counts in DOM directly 
+    async function(histograms) {
+        // console.log('debug: histogram counters',histograms);
+        if (Object.keys(histograms).length === 0) {
+            // console.log("debug: empty histogram");
+            return window.dash_clientside.no_update
+        }
+        // get all our badges into a lookup hash by id
+        const termCounts = Array.from(document.getElementsByClassName('term-count'));
+        const termCountLookup = {}
+        termCounts.forEach((item) => termCountLookup[JSON.parse(item.id)['index']] = item)        
+        // const entity_name = 'file' ;
+        Object.keys(histograms._aggregation).forEach((entity_name) => {
+            console.log('Updating badges', entity_name)
+            const entity = histograms._aggregation[entity_name] ; 
+            for (const property_name in entity) {
+              const p = `${entity_name}-${property_name}`          
+              entity[property_name].histogram.forEach((h) => {
+                // TODO - check range sliders
+                if (termCountLookup[`${p}-${h.key}`]) {
+                    termCountLookup[`${p}-${h.key}`].innerText = h.count
+                    // remove from array
+                    delete termCountLookup[`${p}-${h.key}`]
+                }
+              }) ;
+              // set items no longer in histogram to 0
+              Object.keys(termCountLookup).forEach((k) => {
+                if (k.startsWith(p)) {
+                    termCountLookup[k].innerText = '0';
+                }          
+              }) ;                    
+            }                 
+        });
+        // always return no update since we updated dom directly
+        return window.dash_clientside.no_update
+    }
+    """,
+    Output('placeholder-dummy', 'children'),
+    Input('histogram-data', 'data'),
+    prevent_initial_call=True
+)
 
 
 def layout():
@@ -122,6 +181,8 @@ def layout():
                 dbc.Tab(file_accordian, label="Files"),
                 dbc.Tab(observation_accordian, label="Observations"),
             ]
-        )
+        ),
+        dcc.Store(id='histogram-data', storage_type='local'),
+        html.P(id='placeholder-dummy', hidden=True)
     ]
 

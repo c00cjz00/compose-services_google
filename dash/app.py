@@ -22,7 +22,7 @@ def check_privileges():
     get_authz()
 
 
-# Clientside callback
+# Clientside callback: refresh token by calling fence's /user endpoint
 app.clientside_callback(
     """
     // Call fence's /user endpoint, parse the response and update the profile 
