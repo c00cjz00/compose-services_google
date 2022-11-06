@@ -105,16 +105,16 @@ def histogram_sliders(histograms):
 
         assert len(v.histogram) == 1
         df = pd.DataFrame(v.histogram)
-        min_ = v.histogram[0].key[0]
-        max_ = v.histogram[0].key[1]
+        min_ = int(v.histogram[0].key[0])
+        max_ = int(v.histogram[0].key[1])
         # value = max_,
         sliders.append(
-            dcc.Slider(min_, max_, int((max_ - min_)/10),
-                       id={
-                           'index': f"{entity}-{k}",
-                           'type': 'query-parameter'
-                       }
-                       )
+            dcc.RangeSlider(min_, max_, int((max_ - min_) / 10),
+                            id={
+                                'index': f"{entity}-{k}",
+                                'type': 'query-parameter'
+                            }
+                            )
         )
 
         dfs.append(df)
