@@ -6,9 +6,11 @@ import logging
 logger = logging.getLogger('dash')
 
 
-def get_observation_histograms(dot_notation=True):
+def get_observation_histograms(dot_notation=True, variables={"filter": {"AND": []}}):
     """Fetch histogram of counts for all observations.
-    @type dot_notation: bool render results as a lightweight class"""
+    @param variables: a graphql filter
+    @type dot_notation: bool render results as a lightweight class
+    """
 
     histogram_query = """
     query ($filter: JSON) {
@@ -56,7 +58,7 @@ def get_observation_histograms(dot_notation=True):
     
     """
     guppy_service = get_guppy_service()
-    data = guppy_service.graphql_query(histogram_query, variables={"filter": {"AND": []}})['data']
+    data = guppy_service.graphql_query(histogram_query, variables=variables)['data']
     if dot_notation:
         return DotWiz(data)
     return data

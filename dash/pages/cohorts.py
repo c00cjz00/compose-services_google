@@ -2,7 +2,7 @@ import logging
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, Output, Input, ALL, callback
+from dash import dcc, html, Output, Input, ALL, callback, MATCH, State
 from figures.histogram import histogram_selects, histogram_sliders
 from inflection import titleize, pluralize
 from models.file import get_file_histograms
@@ -22,23 +22,45 @@ def tree_dict():
     return collections.defaultdict(tree_dict)
 
 
-@callback(
-    Output('query-builder', 'children'),
-    Input({'type': 'query-parameter', 'index': ALL}, 'value'),
-    Input({'type': 'query-parameter', 'index': ALL}, 'id')
-
-)
-def display_output(values, ids):
-    """Build graphql filter."""
-    filter_ = tree_dict()
+def build_filters(values, ids):
+    """Create a filter from selected values and ids."""
+    filters = tree_dict()
     for value, id_ in zip(values, ids):
         if not value:
             continue
         entity, parameter = id_["index"].split('-')
-        if 'AND' not in filter_[entity]:
-            filter_[entity]['AND'] = []
-        filter_[entity]['AND'].append({'IN': {parameter: value}})
-    return json.dumps(filter_, indent=4)
+        if 'AND' not in filters[entity]['filter']:
+            filters[entity]['filter']['AND'] = []
+        filters[entity]['filter']['AND'].append({'IN': {parameter: value}})
+    return filters
+
+
+@callback(
+    Output('query-builder', 'children'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'value'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'id')
+)
+def display_filters(values, ids):
+    """Build graphql filter."""
+    logger.error(('display_filters', values, ids))
+    filters = build_filters(values, ids)
+    return json.dumps(filters, indent=4)
+
+
+@callback(
+    Output({'type': 'term-count', 'index': MATCH}, 'children'),
+    Input({'type': 'query-parameter', 'index': MATCH}, 'value'),
+    State({'type': 'query-parameter', 'index': MATCH}, 'id')
+)
+def update_counters(values, ids):
+    """Run a histogram and then update badges."""
+    logger.error(('update_counters', values, ids))
+    return ''
+    # filters = build_filters(values, ids)
+    # if 'file' in filters:
+    #     file_histograms = get_file_histograms(variables=filters['file'])
+    #     logger.error(file_histograms)
+    # return json.dumps(filters, indent=4)
 
 
 def layout():
@@ -52,7 +74,6 @@ def layout():
                     [
                         item,
                     ],
-                    id=f"accordian_item-{item.id}",
                     title=f"{titleize(pluralize(name))}"
                 )
                 for item, df, name in zip(items_, dfs_, names_)
@@ -104,5 +125,3 @@ def layout():
         )
     ]
 
-
-# variables :  {filter: {AND: [{IN: {encounter_type: ["Encounter for symptom"]}}]}}

@@ -1,8 +1,9 @@
+import logging
+
+import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-import dash_bootstrap_components as dbc
 from dash import html, dcc
-import logging
 
 logger = logging.getLogger('dash')
 
@@ -64,7 +65,11 @@ def histogram_selects(histograms):
                     'label': html.Div(
                          [
                              html.Div(h.key),
-                             dbc.Badge(h.count, className="ms-1", color="info")
+                             dbc.Badge(h.count, className="ms-1", color="info",
+                                       id={
+                                           'index': f"{entity}-{k}-{h.key}",
+                                           'type': 'term-count'
+                                       })
                          ],
                          style={'display': 'inline-flex', 'paddingLeft': '2em'}
                     )
