@@ -2,13 +2,12 @@ import logging
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, Output, Input, ALL, callback, MATCH, State, get_app
+from dash import dcc, html, Output, Input, ALL, callback, MATCH, State, get_app, dash_table
+from dotwiz import DotWiz
 from figures.histogram import histogram_selects, histogram_sliders
 from inflection import titleize, pluralize
-from models.file import get_file_histograms
-from models.observation import get_observation_histograms
-# Define recursive dictionary
-from collections import defaultdict
+from models.file import get_file_histograms, get_files
+from models.observation import get_observation_histograms, get_patients
 import json
 import collections
 
@@ -42,7 +41,6 @@ def build_filters(values, ids):
 )
 def display_filters(values, ids):
     """Build graphql filter."""
-    logger.error(('display_filters', values, ids))
     filters = build_filters(values, ids)
     return json.dumps(filters, indent=4)
 
@@ -54,26 +52,36 @@ def display_filters(values, ids):
 )
 def update_counters(values, ids):
     """Run a histogram and then update badges."""
-    logger.error(('update_counters', values, ids))
     filters = build_filters(values, ids)
     histograms = {'_aggregation': {}}
     histogram_fetchers = {
         'file': get_file_histograms,
         'case': get_observation_histograms
     }
-    for entity_name in filters:
-        fetcher = histogram_fetchers.get(entity_name, None)
+    for entity_name in histogram_fetchers.keys():
+        fetcher = histogram_fetchers.get(entity_name)
         if fetcher:
-            fetcher_results = fetcher(variables=filters[entity_name])
+            fetcher_results = fetcher(variables=filters.get(entity_name, {"filter": {"AND": []}}))
             for aggregation_name in fetcher_results['_aggregation']:
                 histograms['_aggregation'][aggregation_name] = fetcher_results['_aggregation'][aggregation_name]
     return histograms
-    #
-    # if 'file' in filters:
-    #     file_histograms = get_file_histograms(variables=filters['file'])
-    #     return file_histograms
-    # else:
-    #     return {}
+
+
+@callback(
+    Output('results', 'data'),
+    Input('query', 'n_clicks'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'value'),
+    Input({'type': 'query-parameter', 'index': ALL}, 'id')
+)
+def query(n_clicks, values, ids):
+    """Run a histogram and then update badges."""
+    filters = build_filters(values, ids)
+    patient_ids = get_patients(variables=filters.get('case', {"filter": {"AND": []}}))
+    file_filters = filters.get('file', {"filter": {"AND": []}})
+    file_filters['filter']['AND'].append({"IN": {"patient_id": patient_ids}})
+    file_filters['sort'] = []
+    files = get_files(variables=file_filters)
+    return files
 
 
 # Clientside callback: traverse histogram, match DOM with class name 'term-count' update counts in DOM directly
@@ -176,12 +184,15 @@ def layout():
         html.Code(
             id="query-builder",
             children="Selections go here..."),
+        html.Hr(className="my-2"),
+        html.Button('Query', id='query', n_clicks=0, style={'display': 'flex', 'float': 'right'}),
         dbc.Tabs(
             [
                 dbc.Tab(file_accordian, label="Files"),
                 dbc.Tab(observation_accordian, label="Observations"),
             ]
         ),
+        dash_table.DataTable(id='results'),
         dcc.Store(id='histogram-data', storage_type='local'),
         html.P(id='placeholder-dummy', hidden=True)
     ]

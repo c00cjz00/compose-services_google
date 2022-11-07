@@ -6,6 +6,31 @@ import logging
 logger = logging.getLogger('dash')
 
 
+def get_patients(variables={"filter": {"AND": []}}):
+    """Query histogram on patient_id to get all unique patients
+    @type variables: object graphql filter object
+    @return list of patient_id strings
+    """
+    query = """
+        query ($filter: JSON) {
+          _aggregation {
+            case(filter: $filter) {
+              patient_id {
+                histogram {
+                  key
+                  count
+                }
+              }
+            }
+          }
+        }  
+    """
+    guppy_service = get_guppy_service()
+    data = guppy_service.graphql_query(query, variables=variables)['data']
+    data = DotWiz(data)
+    return [h.key for h in data._aggregation.case.patient_id.histogram]  # noqa
+
+
 def get_observation_histograms(dot_notation=True, variables={"filter": {"AND": []}}):
     """Fetch histogram of counts for all observations.
     @param variables: a graphql filter
