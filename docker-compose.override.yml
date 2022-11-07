@@ -123,6 +123,17 @@ services:
       - minio-manchester
       - minio-stanford
 
+  dash-service:
+    build: dash
+    container_name: dash-service
+    ports:
+      - "8050:8050"  # HOST:CONTAINER
+    environment:
+      - DASH_URL_BASE_PATHNAME=/dash/proxy/
+    networks:
+      - devnet
+
+
 
 # expose postgres to host os
 
