@@ -1,15 +1,14 @@
+import collections
+import json
 import logging
 
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, Output, Input, ALL, callback, MATCH, State, get_app, dash_table
-from dotwiz import DotWiz
+from dash import dcc, html, Output, Input, ALL, callback, get_app, dash_table
 from figures.histogram import histogram_selects, histogram_sliders
 from inflection import titleize, pluralize
 from models.file import get_file_histograms, get_files
 from models.observation import get_observation_histograms, get_patients
-import json
-import collections
 
 logger = logging.getLogger('dash')
 
@@ -129,6 +128,22 @@ get_app().clientside_callback(
     prevent_initial_call=True
 )
 
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "24rem",
+    # "padding": "2rem 1rem",
+    "background-color": "#f8f9fa",
+}
+
+CONTENT_STYLE = {
+    "margin-left": "25rem",
+    "margin-right": "2rem",
+    "padding": "2rem 1rem",
+}
+
 
 def layout():
     """Render the cohort page."""
@@ -176,24 +191,35 @@ def layout():
 
     observation_accordian = accordian(items, data_frames, names)
 
-    return [
-        html.H2("Cohorts"),
-        html.Hr(className="my-2"),
-        html.P('Quis imperdiet massa tincidunt nunc. Convallis tellus id interdum velit. Mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus.'),
-        html.Hr(className="my-2"),
-        html.Code(
-            id="query-builder",
-            children="Selections go here..."),
-        html.Hr(className="my-2"),
-        html.Button('Query', id='query', n_clicks=0, style={'display': 'flex', 'float': 'right'}),
-        dbc.Tabs(
-            [
-                dbc.Tab(file_accordian, label="Files"),
-                dbc.Tab(observation_accordian, label="Observations"),
-            ]
-        ),
-        dash_table.DataTable(id='results'),
-        dcc.Store(id='histogram-data', storage_type='local'),
-        html.P(id='placeholder-dummy', hidden=True)
-    ]
-
+    return html.Div([
+        dbc.Row([
+            dbc.Col([
+                html.H2("Cohorts"),
+                html.Hr(className="my-2"),
+                html.P(
+                    'Quis imperdiet massa tincidunt nunc. Convallis tellus id interdum velit. Mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus.'),
+                html.Hr(className="my-2"),
+                html.Code(
+                    id="query-builder",
+                    children="Selections go here..."),
+            ], style=CONTENT_STYLE),
+        ]),
+        dbc.Row([
+            dbc.Col([
+                dbc.Tabs([
+                    dbc.Tab([html.P('Quis imperdiet massa tincidunt nunc...')], label="Conditions"),
+                    dbc.Tab([html.P('Quis imperdiet massa tincidunt nunc...')], label="Medications"),
+                    dbc.Tab([html.P('Quis imperdiet massa tincidunt nunc...')], label="Demographics"),
+                    dbc.Tab(observation_accordian, label="Observations"),
+                    dbc.Tab(file_accordian, label="Files"),
+                ])
+            ], style=SIDEBAR_STYLE),
+            dbc.Col([
+                html.Hr(className="my-2"),
+                html.Button('Query', id='query', n_clicks=0, style={'display': 'flex', 'float': 'right'}),
+                dash_table.DataTable(id='results'),
+                dcc.Store(id='histogram-data', storage_type='local'),
+                html.P(id='placeholder-dummy', hidden=True),
+            ], style=CONTENT_STYLE)
+        ])
+    ])
