@@ -145,6 +145,7 @@ services:
     networks:
       - devnet
 
+
 # expose postgres to host os
 
   postgres:

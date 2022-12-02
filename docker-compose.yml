@@ -174,7 +174,8 @@ services:
       - arborist-service
       - esproxy-service
   esproxy-service:
-    image: quay.io/cdis/elasticsearch-oss:6.8.12
+    # image: quay.io/cdis/elasticsearch-oss:6.8.12
+    build: elasticsearch-mac
     container_name: esproxy-service
     environment:
       - cluster.name=elasticsearch-cluster

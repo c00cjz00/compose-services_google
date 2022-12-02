@@ -109,17 +109,6 @@ query ($first: Int!, $offset: Int!) {
       deceasedDateTime
       birthDate
     }
-    conditions {
-      condition_id: id
-      code_coding_0_display
-      code_coding_0_system
-      code_coding_0_code
-      category_0_coding_0_display
-      onsetDateTime
-      abatementDateTime
-      verificationStatus_coding_0_code
-      clinicalStatus_coding_0_code
-    }
     observations {
       observation_id: id
       category: category_0_coding_0_display
@@ -172,18 +161,6 @@ query ($first: Int!, $offset: Int!) {
       component_1_valueCodeableConcept_coding_0_system
       component_1_valueCodeableConcept_coding_0_code
       component_1_valueCodeableConcept_coding_0_display      
-    }
-    medication_requests {
-      medication_id: id
-      medicationCodeableConcept_coding_0_code
-      medicationCodeableConcept_coding_0_system
-      medicationCodeableConcept_coding_0_display
-    }
-    procedures {
-      procedure_id: id
-      code_coding_0_code
-      code_coding_0_system
-      code_coding_0_display
     }
   }
 }
@@ -527,11 +504,11 @@ def read_patients(sc, batch_size, start):
             for k, v in encounter['patient'][0].items():
                 patient[f"patient_{k}"] = v
             patient["_case_id"] = encounter['patient'][0]['id']  # TODO  why this variable ??? in gitops.json ?
-            # create an array of condition names
-            patient['conditions'] = [c['code_coding_0_display'] for c in encounter['conditions']]
-            # create an array of medication names
-            patient['medications'] = [c['medicationCodeableConcept_coding_0_display'] for c in encounter['medication_requests']]
-            # denormalize by observation
+            # # create an array of condition names
+            # patient['conditions'] = [c['code_coding_0_display'] for c in encounter['conditions']]
+            # # create an array of medication names
+            # patient['medications'] = [c['medicationCodeableConcept_coding_0_display'] for c in encounter['medication_requests']]
+            # # denormalize by observation
             for observation in encounter['observations']:
                 patient_observation = dict(patient)
                 for k, v in observation.items():

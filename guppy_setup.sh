@@ -6,6 +6,6 @@ docker-compose stop guppy-service
 docker-compose rm -f guppy-service
 
 # start two processes one for observation and one for file, run them in parallel at a higher 'niceness' level
-echo -e observation"\n"file  | nice -n 10 xargs -L 1 -P 2 nice -n 10 ./etl/tube_lite --credentials_path $1  --elastic http://localhost:9200  --batch_size 20  --entity
+echo -e observation"\n"file  | nice -n 10 xargs -L 1 -P 2 nice -n 10 ./etl/tube_lite --credentials_path $1  --elastic http://localhost:9200  --batch_size 100 --entity
 
 docker-compose up -d guppy-service
