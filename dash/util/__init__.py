@@ -12,12 +12,22 @@ from gen3.submission import Gen3Submission
 # Arborist when a user accesses a webpage and fetches multiple JS/CSS files.
 ACCESS_CACHE = SimpleCache(default_timeout=60)
 
+GUPPY_SERVICE = None
+
+
+def set_guppy_service(guppy_service):
+    global GUPPY_SERVICE
+    GUPPY_SERVICE = guppy_service
+
 
 def get_guppy_service(endpoint='http://revproxy-service') -> Gen3Query:
     """Construct a Query Class
 
     See https://uc-cdis.github.io/gen3sdk-python/_build/html/query.html#gen3.query.Gen3Query
     """
+    global GUPPY_SERVICE
+    if GUPPY_SERVICE:
+        return GUPPY_SERVICE
     return Gen3Query(Gen3SessionAuth(endpoint=endpoint))
 
 
@@ -46,7 +56,6 @@ def get_authz():
     if ACCESS_CACHE.has(authorization):
         return ACCESS_CACHE.get(authorization)
     # miss, go get it
-    # logger.debug("Refreshing authz")
     arborist_response = requests.get('http://revproxy-service/authz/mapping',
                                      headers={'Authorization': authorization})
     arborist_response.raise_for_status()

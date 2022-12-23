@@ -100,6 +100,10 @@ def histogram_sliders(histograms):
         v.name = k
         if any([isinstance(h.key, str) for h in v.histogram]):
             continue
+
+        if any([h.key[0] is None for h in v.histogram]):
+            continue
+
         if not any([isinstance(h.key, list) for h in v.histogram]):
             continue
 

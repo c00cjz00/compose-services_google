@@ -75,7 +75,7 @@ def update_counters(values, ids):
 def query(n_clicks, values, ids):
     """Run a histogram and then update badges."""
     filters = build_filters(values, ids)
-    patient_ids = get_patients(variables=filters.get('case', {"filter": {"AND": []}}))
+    patient_ids = get_patients(variables=filters.get('observation', {"filter": {"AND": []}}))
     file_filters = filters.get('file', {"filter": {"AND": []}})
     file_filters['filter']['AND'].append({"IN": {"patient_id": patient_ids}})
     file_filters['sort'] = []

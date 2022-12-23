@@ -10,3 +10,4 @@ BEGIN
     END LOOP;
 END $$;
 
+alter table hfj_res_ver ALTER COLUMN res_text_vc TYPE text ;

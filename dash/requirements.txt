@@ -5,6 +5,7 @@ cachelib
 dash_bootstrap_components
 
 gen3
+flatten_json==0.1.13
 
 # dotnotation for dicts
 

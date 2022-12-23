@@ -34,3 +34,9 @@ ALTER USER arborist_user WITH SUPERUSER;
 CREATE USER fhir_user;
 ALTER USER fhir_user WITH PASSWORD 'fhir_pass';
 ALTER USER fhir_user WITH SUPERUSER;
+CREATE database hapi OWNER fhir_user ;
+
+
+CREATE USER hop_user;
+ALTER USER hop_user WITH PASSWORD 'hop_pass';
+CREATE database hop_db OWNER hop_user ;
