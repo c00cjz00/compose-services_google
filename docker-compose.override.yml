@@ -132,7 +132,7 @@ services:
 
 # adds fhir service
   fhir-service:
-    image: "hapiproject/hapi:latest"
+    image: "hapiproject/hapi:v6.1.0"
     ports:
       - "8090:8080"
     volumes:
