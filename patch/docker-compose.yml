@@ -367,7 +367,7 @@ services:
       - portal-service
       - pidgin-service
   tube-service:
-    image: "quay.io/cdis/tube:2023.04"
+    image: "quay.io/cdis/tube:2022.10"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
