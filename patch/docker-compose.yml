@@ -215,7 +215,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/cdis/sheepdog:2023.02"
+    image: "quay.io/cdis/sheepdog:2023.04"
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
