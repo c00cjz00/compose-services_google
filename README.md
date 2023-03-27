@@ -1,5 +1,9 @@
 Edit by 0203126@narlabs.org.tw
 
+0. remvoe docker log
+```
+truncate -s 0 $(docker inspect --format='{{.LogPath}}' afb957ed52b0)
+```
 1.SYSTEM 
 ===
 
